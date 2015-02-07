@@ -14,7 +14,7 @@ sign_in = page.links_with(:text => 'Sign in')[0].click
 #sif.field_with(:name => "Email").value = "xray.app.6"
 #puts sif.methods - Object.methods
 #puts "_________________________________________"
-#sif.fields[5].value = "maxltucker@gmail.com"
+sif.fields[5].value = "maxltucker@gmail.com"
 sif.fields[6].value = "M9vMv6zKzPp8"
 out = agent.submit sif
 
