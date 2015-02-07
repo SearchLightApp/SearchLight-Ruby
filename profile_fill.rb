@@ -6,6 +6,7 @@ require 'logger'
 agent = Mechanize.new
 page = agent.get('http://google.com/')
 
+# sign into account
 sign_in = page.links_with(:text => 'Sign in')[0].click
 
 sign_in_form = sign_in.forms[0]
