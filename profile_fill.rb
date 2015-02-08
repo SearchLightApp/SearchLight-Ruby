@@ -1,26 +1,39 @@
-require 'rubygems'
-require 'mechanize'
-require 'logger'
+require 'capybara'
+# might need to gem install selenium, for some reason
+class ProfilePopulator
+	include Capybara::DSL # used instead of manually starting session
 
-agent = Mechanize.new
-page = agent.get('http://google.com/')
+	def initialize
+		Capybara.default_driver = :selenium
+	end
 
-# sign into account
-sign_in = page.links_with(:text => 'Sign in')[0].click
+	def accessGoogPlus()
+		link = "http://www.google.com"
+		terms = 'hello world'
+		visit link
 
-#pp sign_in
+		# search for terms
+		fill_in "q", with: terms
+		if has_button?("gbqfb")
+			click_button "gbqfb"
+		else
+			click_button "Google Search"
+		end
 
-sif = sign_in.forms[0]
-sif.field_with(:name => "Email").value = "xray.app.6"
-puts sif.methods - Object.methods
-puts "_________________________________________"
-sif.fields[5].value = "xray.app.6"
-sif.fields[6].value = "xraymyass"
-out = agent.submit sif
+		if has_css?("#res")
+			links = all("#res h3 a")
+			links.each do |link|
+			puts link.text
+			puts link[:href]
+			puts ""
+		end
 
-# search and get new results
-newpage = agent.get "http://www.google.com/"
-search_form = page.form_with :name => "f"
-search_form.field_with(:name => "q").value = "haircut"
-res= agent.submit search_form
-puts res.links
+		return 'done ======== '
+	end
+# end ProfilePopulator
+end
+
+# test script
+g = ProfilePopulator.new.accessGoogPlus
+puts g
+end
