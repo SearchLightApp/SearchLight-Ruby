@@ -1,5 +1,6 @@
 require 'capybara'
 # might need to gem install selenium, for some reason
+
 class ProfilePopulator
 	include Capybara::DSL # used instead of manually starting session
 
