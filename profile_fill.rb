@@ -1,5 +1,5 @@
 require 'capybara'
-# might need to gem install selenium, for some reason
+# might need to gem install selenium and selenium-webdriver, for some reason
 
 class ProfilePopulator
 	include Capybara::DSL # used instead of manually starting session
@@ -8,7 +8,8 @@ class ProfilePopulator
 		Capybara.default_driver = :selenium
 	end
 
-	def accessGoogPlus()
+	# TODO: feed array of items to search / allow customization
+	def searchTerms()
 		link = "http://www.google.com"
 		terms = 'hello world'
 		visit link
@@ -24,17 +25,21 @@ class ProfilePopulator
 		if has_css?("#res")
 			links = all("#res h3 a")
 			links.each do |link|
-			puts link.text
-			puts link[:href]
-			puts ""
+				puts link.text
+				puts link[:href]
+				puts ""
+			end
 		end
+	end
 
-		return 'done ======== '
+	def signIn()
+		visit 'http://plus.google.com'
+
+		fill_in 'Email', :with => 'xray.app.1'
+		fill_in 'Passwd', :with => 'xraymyass'
+		click_on 'signIn'
 	end
 # end ProfilePopulator
 end
 
-# test script
-g = ProfilePopulator.new.accessGoogPlus
-puts g
-end
+g = ProfilePopulator.new.signIn
