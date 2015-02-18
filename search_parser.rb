@@ -1,5 +1,9 @@
 require 'capybara'
 
+#
+# Import
+#
+
 class SearchParser
   include Capybara::DSL
   def initialize
@@ -13,8 +17,8 @@ class SearchParser
     #"#{uri.path}?#{uri.query}".should == people_path(:search => 'name')
     puts current_url
     puts current_path
-    fill_in 'q', :with => 'immigration\n'
-    click_on 'signIn'
+    fill_in 'q', :with => "immigration"
+    #click_on 'signIn'
     page.save_screenshot 'set_location.png'
   end
 end
