@@ -24,7 +24,7 @@ class ProfilePopulator
 
 	# TODO: feed array of items to search / allow customization
 	def searchTerms(terms, loc)
-		link = "http://www.google.com"
+		link = "https://www.google.com"
 		visit link
 
 		# search for terms
@@ -78,14 +78,14 @@ class ProfilePopulator
 			fill_in 'type a city name', :with => loc
 			first(:css, 'span[aria-checked]').set 'true' # THIS ISNT WORKING FSR
 			find('div[guidedhelpid="profile_save"]', text:'Save').click
-			page.save_screenshot 'set_location.png'
+			#page.save_screenshot 'set_location.png'
 		end
 	end
 
 	def setSearchLocation(loc)
 		# first turn off personal results
 		find_by_id("abar_ps_off").click
-		page.save_screenshot 'global.png'
+		#page.save_screenshot 'global.png'
 
 		find('a[role="button"]', text: 'Search tools').click
 		options = all(:css, '.hdtb-mn-hd')
