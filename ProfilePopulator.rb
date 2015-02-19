@@ -9,7 +9,6 @@ require 'capybara'
 
 class ProfilePopulator
 	include Capybara::DSL # used instead of manually starting session
-	Capybara.default_wait_time = 10
 
 	def initialize()
 		Capybara.default_driver = :selenium
@@ -25,16 +24,16 @@ class ProfilePopulator
 	end
 
 	def searchTerms(terms, loc)
-		link = "https://www.google.com"
+		link = "https://www.google.com/search?q="+terms
 		visit link
 
 		# search for terms
-		fill_in "q", with: terms
-		if has_button?("gbqfb")
-			click_button "gbqfb"
-		else
-			click_button "Google Search"
-		end
+		# fill_in "q", with: terms
+		# if has_button?("gbqfb")
+		# 	click_button "gbqfb"
+		# else
+		# 	click_button "Google Search"
+		# end
 
 		setSearchLocation(loc)
 		if has_css?("#res")
@@ -87,14 +86,18 @@ class ProfilePopulator
 
 	def setSearchLocation(loc)
 		# first turn off personal results
-		find_by_id("abar_ps_off").click
+		# find_by_id("abar_ps_off").click
 		#page.save_screenshot 'global.png'
 
 		find('a[role="button"]', text: 'Search tools').click
 		page.save_screenshot 'searchtools.png'
-		page.should have_css('.hdtb-mn-hd') # wait for options to appear
+
 		options = all(:css, 'div.hdtb-mn-hd')
-		puts options.length
+		# puts options.length
+		if options.empty?
+			find('a[id="hdtb_tls"]', text: 'Search tools').click
+			options = all(:css, 'div.hdtb-mn-hd')
+		end
 		options[2].click
 		# save_and_open_page
 		fill_in 'lc-input', :with => loc

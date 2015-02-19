@@ -22,21 +22,21 @@ Asearch =[{:txt=>"USCIS: Homepage", :url=>"http://www.uscis.gov/"},
 locations.each do |location|
 	terms.each do |term|
 		profile = ProfilePopulator.new
-		signedin = profile.signIn()
+		# signedin = profile.signIn()
 		# if we could sign in
 
 #/Users/ceciliareyes/Projects/magic2015/ProfilePopulator.rb:91:in `setSearchLocation': undefined method `click' for nil:NilClass (NoMethodError)
-		if signedin
+		# if signedin
 			# profile.setProfileLocation(location) # uncomment for G+ profile setting
 			results = profile.searchTerms(term, location)
-		end
-		puts "---"
-		puts SP.SearchComp(Asearch,results)
-		puts "---"
-		puts SP.SearchComp(results,Asearch)
-		puts "---"
+		# end
+		#puts "---"
+		#puts SP.SearchComp(Asearch,results)
+		#puts "---"
+		#puts SP.SearchComp(results,Asearch)
+		#puts "---"
 		puts results
-		puts results.size
+		#puts results.size
 		## TODO None of these seem to work for getting a "clean slate" session
 		#page.execute_script "window.close();"
 		Capybara.reset_sessions!
