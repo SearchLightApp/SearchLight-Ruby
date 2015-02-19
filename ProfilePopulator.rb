@@ -1,13 +1,15 @@
 require 'capybara'
+# require 'spec_helper'
+
 # might need to gem install selenium and selenium-webdriver, for some reason
 
 # gem install poltergeist
 # brew install phantomjs
-# require 'capybara/poltergeist'Capybara.default_wait_time = 5
+# require 'capybara/poltergeist'
 
 class ProfilePopulator
-	Capybara.default_wait_time = 5
 	include Capybara::DSL # used instead of manually starting session
+	Capybara.default_wait_time = 10
 
 	def initialize()
 		Capybara.default_driver = :selenium
@@ -22,7 +24,6 @@ class ProfilePopulator
 		# end
 	end
 
-	# TODO: feed array of items to search / allow customization
 	def searchTerms(terms, loc)
 		link = "https://www.google.com"
 		visit link
@@ -38,11 +39,12 @@ class ProfilePopulator
 		setSearchLocation(loc)
 		if has_css?("#res")
 			links = all("#res h3 a")
-			links.each do |link|
-				#puts link.text
-				#puts link[:href]
-				#puts ""
-			end
+			# write out links to console
+			# links.each do |link|
+			# 	#puts link.text
+			# 	#puts link[:href]
+			# 	#puts ""
+			# end
 		end
 		#Encode the necessary information from each HTML element into a Ruby hash
 		links.map{|elem| {txt: elem.text, url: elem[:href]}}
@@ -75,7 +77,8 @@ class ProfilePopulator
 
 		# places pop up
 		within(:xpath, '//*[@class="G-q-B"]') do
-			fill_in 'type a city name', :with => loc
+			first(:css, 'input[label="type a city name"]').set loc
+			# fill_in 'type a city name', :with => loc
 			first(:css, 'span[aria-checked]').set 'true' # THIS ISNT WORKING FSR
 			find('div[guidedhelpid="profile_save"]', text:'Save').click
 			#page.save_screenshot 'set_location.png'
@@ -88,11 +91,16 @@ class ProfilePopulator
 		#page.save_screenshot 'global.png'
 
 		find('a[role="button"]', text: 'Search tools').click
-		options = all(:css, '.hdtb-mn-hd')
+		page.save_screenshot 'searchtools.png'
+		page.should have_css('.hdtb-mn-hd') # wait for options to appear
+		options = all(:css, 'div.hdtb-mn-hd')
+		puts options.length
 		options[2].click
+		# save_and_open_page
 		fill_in 'lc-input', :with => loc
 		page.save_screenshot 'set_location_search.png'
-		click_on 'Set'
+		# click_on 'Set'
+		find('input[jsaction="loc.s"]').click
 	end
 # end ProfilePopulator
 end
