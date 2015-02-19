@@ -36,15 +36,16 @@ class ProfilePopulator
 		end
 
 		setSearchLocation(loc)
-
 		if has_css?("#res")
 			links = all("#res h3 a")
 			links.each do |link|
-				puts link.text
-				puts link[:href]
-				puts ""
+				#puts link.text
+				#puts link[:href]
+				#puts ""
 			end
 		end
+		#Encode the necessary information from each HTML element into a Ruby hash
+		links.map{|elem| {txt: elem.text, url: elem[:href]}}
 	end
 
 	# TODO: ideally, user would be able to select from account base
@@ -94,15 +95,4 @@ class ProfilePopulator
 		click_on 'Set'
 	end
 # end ProfilePopulator
-end
-
-profile = ProfilePopulator.new
-terms = ARGV[0]
-location = ARGV[1]
-signedin = profile.signIn()
-# if we could sign in
-
-if signedin
-	# setProfileLocation(location) # uncomment for G+ profile setting
-	profile.searchTerms(terms, location)
 end
