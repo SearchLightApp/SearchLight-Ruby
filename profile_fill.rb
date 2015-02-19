@@ -3,12 +3,13 @@ require 'capybara'
 
 # gem install poltergeist
 # brew install phantomjs
-# require 'capybara/poltergeist'
+# require 'capybara/poltergeist'Capybara.default_wait_time = 5
 
 class ProfilePopulator
+	Capybara.default_wait_time = 5
 	include Capybara::DSL # used instead of manually starting session
 
-	def initialize
+	def initialize()
 		Capybara.default_driver = :selenium
 
 		# TODO: move to phantomJS or so bc firefox is annoying
@@ -22,28 +23,29 @@ class ProfilePopulator
 	end
 
 	# TODO: feed array of items to search / allow customization
-	# def searchTerms()
-	# 	link = "http://www.google.com"
-	# 	terms = 'hello world'
-	# 	visit link
+	def searchTerms(terms, loc)
+		link = "http://www.google.com"
+		visit link
 
-	# 	# search for terms
-	# 	fill_in "q", with: terms
-	# 	if has_button?("gbqfb")
-	# 		click_button "gbqfb"
-	# 	else
-	# 		click_button "Google Search"
-	# 	end
+		# search for terms
+		fill_in "q", with: terms
+		if has_button?("gbqfb")
+			click_button "gbqfb"
+		else
+			click_button "Google Search"
+		end
 
-	# 	if has_css?("#res")
-	# 		links = all("#res h3 a")
-	# 		links.each do |link|
-	# 			puts link.text
-	# 			puts link[:href]
-	# 			puts ""
-	# 		end
-	# 	end
-	# end
+		setSearchLocation(loc)
+
+		if has_css?("#res")
+			links = all("#res h3 a")
+			links.each do |link|
+				puts link.text
+				puts link[:href]
+				puts ""
+			end
+		end
+	end
 
 	# TODO: ideally, user would be able to select from account base
 	def signIn()
@@ -53,29 +55,53 @@ class ProfilePopulator
 		fill_in 'Passwd', :with => 'xraymyass'
 		click_on 'signIn'
 
-		setProfile()
+		return true
 	end
 
-	def setProfile()
+	def setProfileLocation(loc)
 		# hover on Home and click Profile
 		find('a[title="Home"]').hover
 		find('a[aria-label="Profile"]').click
-		page.save_screenshot 'profile.png'
+		# page.save_screenshot 'profile.png' #optional
 		find('span[data-dest="about"]').click
-		page.save_screenshot 'about.png'
+		# page.save_screenshot 'about.png' #optional
 
-		find_by_id('12').find('span', text:'Edit', exact:true).click
+		# find location block
+		# TODO identify with something other than id?
+		within(:xpath, '//*[@id="12"]') do
+			find('span', text:'Edit', exact:true).click
+		end
 
-		fill_in 'type a city name', :with => 'Portland, OR'
-		first(:css, 'span[role="checkbox"]').set(true)
-		page.save_screenshot 'set_location.png'
-		find('div', text:'Save', exact:true).click
-		# popup = page.driver.browser.window_handles.last
-
+		# places pop up
+		within(:xpath, '//*[@class="G-q-B"]') do
+			fill_in 'type a city name', :with => loc
+			first(:css, 'span[aria-checked]').set 'true' # THIS ISNT WORKING FSR
+			find('div[guidedhelpid="profile_save"]', text:'Save').click
+			page.save_screenshot 'set_location.png'
+		end
 	end
 
+	def setSearchLocation(loc)
+		# first turn off personal results
+		find_by_id("abar_ps_off").click
+		page.save_screenshot 'global.png'
 
+		find('a[role="button"]', text: 'Search tools').click
+		options = all(:css, '.hdtb-mn-hd')
+		options[2].click
+		fill_in 'lc-input', :with => loc
+		page.save_screenshot 'set_location_search.png'
+		click_on 'Set'
+	end
 # end ProfilePopulator
 end
 
-g = ProfilePopulator.new.signIn
+profile = ProfilePopulator.new
+
+signedin = profile.signIn()
+# if we could sign in
+
+if signedin
+	# setProfileLocation('Portland, OR') # uncomment for G+ profile setting
+	profile.searchTerms('hello world','Portland, OR')
+end
