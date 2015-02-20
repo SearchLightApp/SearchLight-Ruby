@@ -7,7 +7,8 @@ $sign_me_in = false
 $max_tries = 3
 
 terms = ["Immigration", "Abortion", "Loans","Bank", "Healthcare", "Obama", "Marijuana", "Police", "Guns", "Hebdo", "Christian", "Jewish", "Divorce", "Obamacare","Israel","Palestine", "Brown"]
-locations = ['Birmingham, AL', 'Phoenix, AZ', 'San Francisco, CA', 'New York, NY', 'Birmingham, AL', 'Yarmouth, MA', 'Miami, FL', 'El Paso, TX', 'Minneapolis, MN', 'New Orleans, LA', 'Seattle,WA', 'Denver, CO', 'Ferguson, MO']
+#locations = ['Birmingham, AL', 'Phoenix, AZ', 'San Francisco, CA', 'New York, NY', 'Birmingham, AL', 'Yarmouth, MA', 'Miami, FL', 'El Paso, TX', 'Minneapolis, MN', 'New Orleans, LA', 'Seattle,WA', 'Denver, CO', 'Ferguson, MO']
+locations = ['Los Angeles, CA', 'Honolulu, HI', 'Boise, ID', 'Las Vegas, NV', 'Boston, MA', 'Austin, TX', 'Charlotte, NC', 'Salt Lake City, UT', 'St Louis, MO']
 
 def ProcessQuery(term, location,tries)
 	# we try to do some stuff, and catch (almost all) errors with rescue
