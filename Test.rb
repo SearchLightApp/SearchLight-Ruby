@@ -25,13 +25,14 @@ def ProcessQuery(term, location,tries)
 		end
 
 		results = profile.searchTerms(term, location)
+
 	# Here we catch errors, print them and try again
 	rescue StandardError => e
-		puts ""
-		puts "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-		puts e.to_s
-		puts "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-		puts ""
+		STDOUT.write "\n"
+		STDOUT.write "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"
+		STDOUT.write e.to_s
+		STDOUT.write "\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"
+		STDOUT.write "\n"
 		if (tries==0)
 			STDOUT.flush
 			STDERR.flush
@@ -40,10 +41,9 @@ def ProcessQuery(term, location,tries)
 		else
 			ProcessQuery(term,location,tries-1)
 		end
-	ensure
-		Capybara.reset_sessions! #TODO This was broken until you commented out an assertion in session.rb
-		return results
 	end
+	Capybara.reset_sessions!
+	return results
 end
 
 
