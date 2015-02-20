@@ -3,18 +3,18 @@ require_relative 'SearchParser'
 
 SP = SearchParser.new
 
-
-
+$sign_me_in = true
 
 terms = ["Immigration", "Obama", "Abortion"]
 locations = ["Tucson, AZ", "San Francisco, CA"]
 
 def ProcessQuery(term, location,tries)
 	# we try to do some stuff, and catch (almost all) errors with rescue
+	global_variables
 	begin
 		profile = ProfilePopulator.new
 		##Change false here to try signing in
-		if false
+		if $sign_me_in
 			signedin = profile.signIn()
 			# if we could sign in
 			if signedin
@@ -50,10 +50,16 @@ end
 locations.each do |q_location|
 	terms.each do |q_term|
 		results = ProcessQuery(q_term, q_location, 5)
-		puts "----------------------------------------------------------------------------------------------------"
-		puts results
-		puts results.size
-		puts "----------------------------------------------------------------------------------------------------"
+		STDOUT.write "----------------------------------------------------------------------------------------------------\n"
+		if results.nil?
+			STDOUT.write "No results!\n"
+		else
+			STDOUT.write results
+			STDOUT.write "\n"
+			STDOUT.write results.size
+			STDOUT.write "\n"
+		end
+		STDOUT.write "----------------------------------------------------------------------------------------------------\n"
 	end
 end
 
