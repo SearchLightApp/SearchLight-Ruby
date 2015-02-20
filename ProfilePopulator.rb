@@ -36,14 +36,15 @@ class ProfilePopulator
 		# end
 
 		setSearchLocation(loc)
+		sleep(2) #TODO Find a better solution to this
 		if has_css?("#res")
 			links = all("#res h3 a")
 			# write out links to console
-			# links.each do |link|
-			# 	#puts link.text
-			# 	#puts link[:href]
-			# 	#puts ""
-			# end
+			#links.each do |link|
+			#	puts link.text
+			#	puts link[:href]
+			#	puts ""
+			#end
 		end
 		#Encode the necessary information from each HTML element into a Ruby hash
 		links.map{|elem| {txt: elem.text, url: elem[:href]}}
@@ -93,7 +94,7 @@ class ProfilePopulator
 		#page.save_screenshot 'global.png'
 
 		find('a[role="button"]', text: 'Search tools').click
-		page.save_screenshot 'searchtools.png'
+		#page.save_screenshot 'searchtools.png'
 
 		options = all(:css, 'div.hdtb-mn-hd')
 		# puts options.length
@@ -104,7 +105,7 @@ class ProfilePopulator
 		options[2].click
 		# save_and_open_page
 		fill_in 'lc-input', :with => loc
-		page.save_screenshot 'set_location_search.png'
+		#page.save_screenshot 'set_location_search.png'
 		# click_on 'Set'
 		find('input[jsaction="loc.s"]').click
 	end

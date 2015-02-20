@@ -43,7 +43,7 @@ class SearchParser
     return same
   end
 
-  def GlobalComparison(focus_city, res_db, topic)
+  def GlobalComparison(focus_city, topic, res_db)
     res_to_index = {}
     focus_city_array = nil
     res_db.each do |cityname , cityhash|
@@ -54,7 +54,7 @@ class SearchParser
       else
         focus_city_array = cityhash[topic]
         puts "COMPARE:\t"+ cityname
-        puts "TOPIC:\t"  + topic
+        puts "TOPIC:  \t"  + topic
         puts "RESULTS:\t"+ focus_city_array.length.to_s
       end
     end
@@ -64,7 +64,7 @@ class SearchParser
     res_to_index.each do |q_results, citynames|
       puts ""
       any_diff = false
-      puts q_results.length.to_s + " results for:"
+      #puts q_results.length.to_s + " results for:"
       PrintCities(citynames)
       focus_city_array.each_index do |element_index|
         index_in_other = q_results.index(focus_city_array[element_index])
