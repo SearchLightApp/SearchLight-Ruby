@@ -24,17 +24,21 @@ class SearchParser
 		score
   end
 
+  # return true if a and b are the same
   def SearchComparisonPrint(a,b)
+    same = true
     score = []
     a.each_index do |element_index|
-      index_in_b = b.index(a[element_index])
+      index_in_b = b.index(a[element_index]) # get in b what is in a's index position
       if not index_in_b.nil?
-        diff = element_index - index_in_b
+        diff = element_index - index_in_b # compare the elements at same index in a & b
         if diff != 0
-          puts diff.to_s + "  " + a[element_index][:txt]
+          same = false
+          puts sprintf("%+d", diff.to_s) + "  " + a[element_index][:txt]
         end
       end
     end
+    return same
   end
 
   def SearchPrint(a)

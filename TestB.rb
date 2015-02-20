@@ -9,12 +9,9 @@ cities = ['Birmingham, AL', 'Phoenix, AZ', 'San Francisco, CA', 'New York, NY', 
 focus_topic = topics[1]
 focus_city = cities[0]
 
-puts "COMPARE: " + focus_topic + " in " +focus_city+" to national results"
+puts "COMPARE: <<" + focus_topic + ">> in " +focus_city+" to national results: \n"
 $res.each do |key, value|
   puts "--------------------------------------------"
-  puts key
-  s.SearchComparisonPrint(r['Minneapolis, MN']['Immigration'], r[key]['Immigration']);
+  puts key # key = city, value = city's hash of topics
+  s.SearchComparisonPrint(r[focus_city][focus_topic], r[key][focus_topic]);
 end
-#$res.each do |key, value|
-#  puts key
-#end

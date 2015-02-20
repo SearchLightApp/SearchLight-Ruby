@@ -1,11 +1,10 @@
-## magic2015
+magic2015
+=========
 
-As it is, you'll need Firefox 34 to run.
+You'll need Firefox 34 to run.
 
 You might need to gem install selenium and selenium-webdriver, also
 
-* For profile fill*
+## To Run
 
-run like dis:
-
-    ruby [file.rb] "SEARCH" "LOCATION"  
+    ruby TestB.rb
