@@ -55,6 +55,9 @@ class ProfilePopulator
 
 		fill_in 'Email', :with => 'xray.app.1'
 		fill_in 'Passwd', :with => 'xraymyass'
+
+		uncheck 'PersistentCookie'
+
 		click_on 'signIn'
 
 		return true

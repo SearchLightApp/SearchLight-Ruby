@@ -20,6 +20,6 @@ class SearchParser
 			end
 		end
 		score
-	end
+  end
 end
 
