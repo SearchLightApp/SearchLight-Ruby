@@ -10,7 +10,7 @@ terms = ["Immigration", "Abortion", "Loans","Bank", "Healthcare", "Obama", "Mari
 #locations = ['Birmingham, AL', 'Phoenix, AZ', 'San Francisco, CA', 'New York, NY', 'Birmingham, AL', 'Yarmouth, MA', 'Miami, FL', 'El Paso, TX', 'Minneapolis, MN', 'New Orleans, LA', 'Seattle,WA', 'Denver, CO', 'Ferguson, MO']
 locations = ['Los Angeles, CA', 'Honolulu, HI', 'Boise, ID', 'Las Vegas, NV', 'Boston, MA', 'Austin, TX', 'Charlotte, NC', 'Salt Lake City, UT', 'St Louis, MO']
 
-def ProcessQuery(term, location,tries)
+def ProcessQuery(term, location, tries)
 	# we try to do some stuff, and catch (almost all) errors with rescue
 	global_variables
 	begin
@@ -47,7 +47,7 @@ end
 
 
 locations.each do |q_location|
-	STDOUT.write "\n\n$res['"+q_location+"']={}\n"
+	# STDOUT.write "\n\n$res['"+q_location+"']={}\n"
 	terms.each do |q_term|
 		results = ProcessQuery(q_term, q_location, $max_tries)
 		#STDOUT.write "----------------------------------------------------------------------------------------------------\n"
