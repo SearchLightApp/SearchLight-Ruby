@@ -4,11 +4,9 @@ require_relative 'SearchParser'
 SP = SearchParser.new
 
 $sign_me_in = false
-$max_tries = 3
 
-terms = ["Immigration", "Abortion", "Loans","Bank", "Healthcare", "Obama", "Marijuana", "Police", "Guns", "Hebdo", "Christian", "Jewish", "Divorce", "Obamacare","Israel","Palestine", "Brown"]
-#locations = ['Birmingham, AL', 'Phoenix, AZ', 'San Francisco, CA', 'New York, NY', 'Birmingham, AL', 'Yarmouth, MA', 'Miami, FL', 'El Paso, TX', 'Minneapolis, MN', 'New Orleans, LA', 'Seattle,WA', 'Denver, CO', 'Ferguson, MO']
-locations = ['Los Angeles, CA', 'Honolulu, HI', 'Boise, ID', 'Las Vegas, NV', 'Boston, MA', 'Austin, TX', 'Charlotte, NC', 'Salt Lake City, UT', 'St Louis, MO']
+terms = ["Immigration", "Abortion", "Loans", "Healthcare"]
+locations = ["Minneapolis, MN", "Ypsilanti, MI", "Yarmouth, MA", "Miami, Florida", "El Paso, TX"]
 
 def ProcessQuery(term, location, tries)
 	# we try to do some stuff, and catch (almost all) errors with rescue
@@ -30,13 +28,16 @@ def ProcessQuery(term, location, tries)
 
 	# Here we catch errors, print them and try again
 	rescue StandardError => e
-		raise e
-		STDOUT.write "("+($max_tries-tries+1).to_s+")"+ e.to_s + "\n"
+		STDOUT.write "\n"
+		STDOUT.write "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"
+		STDOUT.write e.to_s
+		STDOUT.write "\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"
+		STDOUT.write "\n"
 		if (tries==0)
 			STDOUT.flush
 			STDERR.flush
-			STDOUT.write("All tries failed\n")
-			#exit
+			abort("I tried and I tried, but I kept failing")
+			exit
 		else
 			ProcessQuery(term,location,tries-1)
 		end
@@ -47,9 +48,9 @@ end
 
 
 locations.each do |q_location|
-	# STDOUT.write "\n\n$res['"+q_location+"']={}\n"
+	STDOUT.write "\n\n$res['"+q_location+"']={}\n"
 	terms.each do |q_term|
-		results = ProcessQuery(q_term, q_location, $max_tries)
+		results = ProcessQuery(q_term, q_location, 5)
 		#STDOUT.write "----------------------------------------------------------------------------------------------------\n"
 		if results.nil?
 			STDOUT.write "No results!\n"
@@ -64,8 +65,6 @@ locations.each do |q_location|
 		#STDOUT.write "----------------------------------------------------------------------------------------------------\n"
 	end
 end
-
-
 
 #Capybara.page.reset!
 #Capybara.page.current_window.close

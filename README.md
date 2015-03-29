@@ -1,10 +1,8 @@
 magic2015
 =========
 
-You'll need Firefox 34 to run.
+## Dependencies ## 
+Firefox 34
+gem install selenium, selenium-webdriver
+brew install phantomjs
 
-You might need to gem install selenium and selenium-webdriver, also
-
-## To Run
-
-    ruby TestB.rb
