@@ -5,6 +5,8 @@ You'll need Firefox 34 to run.
 
 You might need to gem install selenium and selenium-webdriver, also
 
+gem install mongoid
+
 ## To Run
 
     ruby TestB.rb
