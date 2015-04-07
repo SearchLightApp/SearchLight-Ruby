@@ -1,7 +1,5 @@
 require 'capybara'
-#
 # Import
-#
 
 class SearchParser
   def initialize()
