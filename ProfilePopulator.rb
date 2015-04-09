@@ -19,11 +19,11 @@ class ProfilePopulator
   end
 
   def initialize()
-  Capybara.current_driver = :poltergeist_debug
-  # Capybara.javascript_driver = :poltergeist_debug
+  Capybara.current_driver = :poltergeist
+  # Capybara.javascript_driver = :pant_debug
 
-  @session = Capybara::Session.new(:poltergeist_debug)
-  # @session.driver.headers = { 'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X)' } # spoof user
+  @session = Capybara::Session.new(:poltergeist)
+  @session.driver.headers = { 'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36' } # spoof user
   Capybara.run_server = false
   end
 
@@ -80,7 +80,7 @@ class ProfilePopulator
 
 # before searching for the given string, sets the Location of search and then returns a dict w each result
   def getSearch(string, page)
-    query = "https://www.google.com/search?q=#{string.gsub(/ /, '+')}&start=#{10*(page-1)}"
+    query = "https://www.google.com/search?q=#{string.gsub(/ /, '+')}&start=#{10*(page-1)}&tbs=qdr:d"
     @session.visit(query)
 
     setSearchLocation('Ypsilanti, MI')
@@ -129,13 +129,16 @@ class ProfilePopulator
 
 # changes the location on the gsearch page
   def setSearchLocation(loc)
-  # first turn off personal results
-  # find_by_id("abar_ps_off").click
+    @session.save_and_open_screenshot('search.png')
+    puts @session.body
+    # first turn off personal results
+    @session.find(:xpath, '//*[id="abar_ps_off"]').click
+    puts @session.body
+    @session.save_and_open_screenshot('personresults.png')
+    # @session.save_and_open_screenshot()
 
-    puts "Body:" + @session.body
-    # page.driver.debug
-    sleep(2)
-    @session.find(:xpath, '//*[@id="hdtb_tls"]').click
+    @session.find(:xpath, '//*[id="hdtb_tls"]').click
+    @session.save_and_open_screenshot()
     options = @session.all(:css, 'div.hdtb-mn-hd')
     # puts options.length
     if options.empty?
@@ -159,12 +162,12 @@ class ProfilePopulator
     account = {:username => 'xray.app.1', :passwd => 'xraymyass'}
 
     if pPop.login!(account)
-      sleep(2)
+
       search = pPop.getSearch('alzheimer', 1)
       # search.each do |s|
         # puts s
       # end
-      sleep(2)
+
       ads = pPop.getAds('cancer', 1)
     end
   end
