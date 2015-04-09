@@ -132,12 +132,12 @@ class ProfilePopulator
     @session.save_and_open_screenshot('search.png')
     puts @session.body
     # first turn off personal results
-    @session.find(:xpath, '//*[id="abar_ps_off"]').click
+    @session.find('a[id="abar_ps_off"]').click
     puts @session.body
     @session.save_and_open_screenshot('personresults.png')
     # @session.save_and_open_screenshot()
 
-    @session.find(:xpath, '//*[id="hdtb_tls"]').click
+    @session.find(:xpath, '//[id="hdtb_tls"]').click
     @session.save_and_open_screenshot()
     options = @session.all(:css, 'div.hdtb-mn-hd')
     # puts options.length
