@@ -19,12 +19,12 @@ class ProfilePopulator
   end
 
   def initialize()
-  Capybara.current_driver = :poltergeist
-  # Capybara.javascript_driver = :pant_debug
+    Capybara.current_driver = :poltergeist
+    # Capybara.javascript_driver = :pant_debug
 
-  @session = Capybara::Session.new(:poltergeist)
-  @session.driver.headers = { 'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36' } # spoof user
-  Capybara.run_server = false
+    @session = Capybara::Session.new(:poltergeist)
+    @session.driver.headers = { 'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36' } # spoof user
+    Capybara.run_server = false
   end
 
   attr_accessor :session

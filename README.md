@@ -12,7 +12,17 @@ PhantomJS
 gem install selenium selenium-webdriver
 gem install mongoid
 
+Not sure but maybe just in case. Gems that may be required
+	rack-test
+	rack
+
 brew install phantomjs
+
+## Databse Management
+Start the database using:
+		"mongod --dbpath=PATH"
+Where PATH is the location of your database. If you don't have a database set up, mongo will initialize it at the given PATH.
+The folder pointed to by PATH must already exist.
 
 ## To Run
 

@@ -1,7 +1,9 @@
 require 'mongoid'
 
-#Mongoid.load!('/Users/maxtucker/Documents/Probabilities/Confidence/magic2015/magic/config/mongoid.yml', :development)
-#Mongoid.load!('mongoid.yml', :development)
+path_to_db_config = './magic/config/mongoid.yml'
+Mongoid.load!(path_to_db_config, :development)
+
+puts Dir.pwd
 
 class Person
   include Mongoid::Document
@@ -19,7 +21,7 @@ print Person.first
 
 #Clean up
 
-#Person.collection.drop()
+Person.collection.drop()
 
 #Capybara.page.reset!
 #Capybara.page.current_window.close
