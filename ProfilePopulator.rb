@@ -19,21 +19,21 @@ class ProfilePopulator
   end
 
   def initialize()
-  # Capybara.default_driver = :selenium
-  Capybara.javascript_driver = :poltergeist_debug
+  Capybara.current_driver = :poltergeist_debug
+  # Capybara.javascript_driver = :poltergeist_debug
 
-  @session = Capybara::Session.new(:poltergeist)
-  @session.driver.headers = { 'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X)' } # spoof user
+  @session = Capybara::Session.new(:poltergeist_debug)
+  # @session.driver.headers = { 'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X)' } # spoof user
   Capybara.run_server = false
   end
 
   attr_accessor :session
 
+# function copied over from Francis, pretty much 
   def getAds(string, page)
     query = "https://www.google.com/search?q=#{string.gsub(/ /, '+')}&start=#{10*(page-1)}"
     @session.visit(query)
     sleep(2) #TODO Find a better solution to this
-
     begin
       @session.find(:xpath, '//*[@id="mbEnd"]/h2/span[2]/a').click
     rescue
@@ -69,7 +69,6 @@ class ProfilePopulator
           truth = {behavioral: true, google_explanation: ad_truth[3], web_hist: ad_truth[7..-2]}
         end
       end
-
       ads.push({text_of_link: ad_text,
                 non_clickable_url: ad_url,
                 description: ad_description,
@@ -79,6 +78,7 @@ class ProfilePopulator
     return ads
   end
 
+# before searching for the given string, sets the Location of search and then returns a dict w each result
   def getSearch(string, page)
     query = "https://www.google.com/search?q=#{string.gsub(/ /, '+')}&start=#{10*(page-1)}"
     @session.visit(query)
@@ -93,6 +93,7 @@ class ProfilePopulator
     #
   end
 
+# visits the login page for an account and unchecks 'stay signed in'
   def login!(account, link = 'https://accounts.google.com/ServiceLogin?hl=en')
     @session.visit(link)
     @session.within("form#gaia_loginform") do
@@ -126,12 +127,13 @@ class ProfilePopulator
   #   end
   # end
 
+# changes the location on the gsearch page
   def setSearchLocation(loc)
   # first turn off personal results
   # find_by_id("abar_ps_off").click
 
-    puts "Body:" + page.body
-    page.driver.debug
+    puts "Body:" + @session.body
+    # page.driver.debug
     sleep(2)
     @session.find(:xpath, '//*[@id="hdtb_tls"]').click
     options = @session.all(:css, 'div.hdtb-mn-hd')
@@ -146,23 +148,24 @@ class ProfilePopulator
     @session.find('input[jsaction="loc.s"]').click
   end
 
+# clear all cookies from the session and reset it
   def clean
     @session.driver.browser.manage.delete_all_cookies
     @session.reset!
   end
 
   def self.test
-    session = self.new
+    pPop = self.new
     account = {:username => 'xray.app.1', :passwd => 'xraymyass'}
 
-    if session.login!(account)
+    if pPop.login!(account)
       sleep(2)
-      search = session.getSearch('alzheimer', 1)
+      search = pPop.getSearch('alzheimer', 1)
       # search.each do |s|
         # puts s
       # end
       sleep(2)
-      ads = session.getAds('cancer', 1)
+      ads = pPop.getAds('cancer', 1)
     end
   end
 
