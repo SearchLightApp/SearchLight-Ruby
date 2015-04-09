@@ -10,6 +10,7 @@ class ProfilePopulator
   Capybara.register_driver :poltergeist_debug do |app|
     Capybara::Poltergeist::Driver.new(app, :inspector => true)
   end
+
   # headless
   Capybara.register_driver :poltergeist do |app|
     Capybara::Poltergeist::Driver.new(app, :phantomjs_options => ['--debug=no', '--ignore-ssl-errors=yes', '--ssl-protocol=TLSv1'], :debug => false)
@@ -19,12 +20,12 @@ class ProfilePopulator
   end
 
   def initialize()
-  # Capybara.default_driver = :selenium
-  Capybara.javascript_driver = :poltergeist_debug
+    # Capybara.default_driver = :selenium
+    Capybara.javascript_driver = :poltergeist_debug
 
-  @session = Capybara::Session.new(:poltergeist)
-  @session.driver.headers = { 'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X)' } # spoof user
-  Capybara.run_server = false
+    @session = Capybara::Session.new(:poltergeist)
+    @session.driver.headers = { 'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X)' } # spoof user
+    Capybara.run_server = false
   end
 
   attr_accessor :session
