@@ -80,7 +80,7 @@ class ProfilePopulator
 
 # before searching for the given string, sets the Location of search and then returns a dict w each result
   def getSearch(string, page)
-    query = "https://www.google.com/search?q=#{string.gsub(/ /, '+')}&start=#{10*(page-1)}&tbs=qdr:d"
+    query = "https://www.google.com/search?q=#{string.gsub(/ /, '+')}&start=#{10*(page-1)}"
     @session.visit(query)
 
     setSearchLocation('Ypsilanti, MI')
@@ -133,7 +133,7 @@ class ProfilePopulator
     # puts @session.body
 
     # first turn off personal results
-    @session.find('a[id="abar_ps_off"]').click
+    # @session.find('a[id="abar_ps_off"]').click
     # puts @session.body
     # @session.save_and_open_screenshot('personresults.png')
     # @session.save_and_open_screenshot()
@@ -148,10 +148,12 @@ class ProfilePopulator
       @session.find('a[id="hdtb-tls"]', text: 'Search tools').click
       options = @session.all(:css, 'div.hdtb-mn-hd')
     end
-    
+
     puts options.length
     options[2].click
-    @session.save_and_open_screenshot('a.png')
+
+    sleep(2)
+    # @session.save_and_open_screenshot('a.png')
     @session.fill_in 'lc-input', :with => loc
     @session.find('input[jsaction="loc.s"]').click
   end
@@ -170,10 +172,9 @@ class ProfilePopulator
     if pPop.login!(account)
 
       search = pPop.getSearch('alzheimer', 1)
-      # search.each do |s|
-        # puts s
-      # end
-
+      search.each do |s|
+        puts s
+      end
       ads = pPop.getAds('cancer', 1)
     end
   end
