@@ -129,16 +129,18 @@ class ProfilePopulator
 
 # changes the location on the gsearch page
   def setSearchLocation(loc)
-    @session.save_and_open_screenshot('search.png')
-    puts @session.body
+    # @session.save_and_open_screenshot('search.png')
+    # puts @session.body
+
     # first turn off personal results
     @session.find('a[id="abar_ps_off"]').click
-    puts @session.body
+    # puts @session.body
     @session.save_and_open_screenshot('personresults.png')
     # @session.save_and_open_screenshot()
 
-    @session.find(:xpath, '//[id="hdtb_tls"]').click
-    @session.save_and_open_screenshot()
+    # puts @session.body
+    @session.find("a[id='"+ :'hdtb-tls'.to_s + "']").click
+    @session.save_and_open_screenshot('selectlocation.png')
     options = @session.all(:css, 'div.hdtb-mn-hd')
     # puts options.length
     if options.empty?
