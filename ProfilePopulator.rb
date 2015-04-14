@@ -135,20 +135,23 @@ class ProfilePopulator
     # first turn off personal results
     @session.find('a[id="abar_ps_off"]').click
     # puts @session.body
-    @session.save_and_open_screenshot('personresults.png')
+    # @session.save_and_open_screenshot('personresults.png')
     # @session.save_and_open_screenshot()
 
     # puts @session.body
-    @session.find("a[id='"+ :'hdtb-tls'.to_s + "']").click
-    @session.save_and_open_screenshot('selectlocation.png')
+    # puts 'hello-world'
+    @session.find("a[id='hdtb-tls']").click
     options = @session.all(:css, 'div.hdtb-mn-hd')
+
     # puts options.length
     if options.empty?
-      @session.find('a[id="hdtb_tls"]', text: 'Search tools').click
+      @session.find('a[id="hdtb-tls"]', text: 'Search tools').click
       options = @session.all(:css, 'div.hdtb-mn-hd')
     end
-
+    
+    puts options.length
     options[2].click
+    @session.save_and_open_screenshot('a.png')
     @session.fill_in 'lc-input', :with => loc
     @session.find('input[jsaction="loc.s"]').click
   end
@@ -163,6 +166,7 @@ class ProfilePopulator
     pPop = self.new
     account = {:username => 'xray.app.1', :passwd => 'xraymyass'}
 
+    # search = pPop.getSearch('alzheimer', 1)
     if pPop.login!(account)
 
       search = pPop.getSearch('alzheimer', 1)
