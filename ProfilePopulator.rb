@@ -29,6 +29,7 @@ class ProfilePopulator
 
   attr_accessor :session
 
+  =begin
 # function copied over from Francis, pretty much 
   def getAds(string, page)
     query = "https://www.google.com/search?q=#{string.gsub(/ /, '+')}&start=#{10*(page-1)}"
@@ -77,10 +78,11 @@ class ProfilePopulator
     end
     return ads
   end
+=end
 
 # before searching for the given string, sets the Location of search and then returns a dict w each result
   def getSearch(string, page)
-    query = "https://www.google.com/search?q=#{string.gsub(/ /, '+')}&start=#{10*(page-1)}&tbs=qdr:d"
+    query = "https://www.google.com/search?q=#{string.gsub(/ /, '+')}&start=#{10*(page-1)}"
     @session.visit(query)
 
     setSearchLocation('Ypsilanti, MI')
@@ -88,6 +90,7 @@ class ProfilePopulator
       links = @session.all("#res h3 a")
     end
     return links.map{|elem| {txt: elem.text, url: elem[:href]}}
+
     #Encode the necessary information from each HTML element into a Ruby hash
     # links.map{|elem| {txt: elem.text, url: elem[:href]}}
     #
@@ -168,12 +171,10 @@ class ProfilePopulator
 
     # search = pPop.getSearch('alzheimer', 1)
     if pPop.login!(account)
-
       search = pPop.getSearch('alzheimer', 1)
       # search.each do |s|
-        # puts s
+      #   puts s
       # end
-
       ads = pPop.getAds('cancer', 1)
     end
   end

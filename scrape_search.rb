@@ -6,9 +6,9 @@ require 'open-uri'
 html = Nokogiri::HTML(open("results_kathmandu.html"))
 
 ### DO SEARCH
-# query = "kathmandu"
-# page = open "http://www.google.com/search?num=100&q=" + query
-# html = Nokogiri::HTML page
+query = "immigrants"
+page  = open "http://www.google.com/search?num=100&q=" + query
+html  = Nokogiri::HTML page
 
 # puts html.css('div.rc')[1]
 
