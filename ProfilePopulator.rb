@@ -140,21 +140,16 @@ class ProfilePopulator
 
     # puts @session.body
     # puts 'hello-world'
-    @session.find("a[id='hdtb-tls']").click
-    # @session.save_and_open_screenshot('clicked.png')
-    options = @session.all(:css, 'div.hdtb-mn-hd')
-
-    # puts options.length
-    if options.empty?
-      @session.find('a[id="hdtb-tls"]', text: 'Search tools').click
-      options = @session.all(:css, 'div.hdtb-mn-hd')
-    end
+    # first turn off personal results
+    @session.find('a[id="abar_ps_off"]').click
 
     # puts options.length
     options[2].click
 
     sleep(2)
-    # @session.save_and_open_screenshot('a.png')
+    puts 'length of options:', options.length
+    options[2].click
+    @session.save_screenshot 'lc input.png'
     @session.fill_in 'lc-input', :with => loc
     @session.find('input[jsaction="loc.s"]').click
   end
@@ -175,6 +170,10 @@ class ProfilePopulator
       #   puts s
       # end
       ads = pPop.getAds('cancer', 1)
+      # ads = pPop.getAds('cancer', 1)
+      # ads.each do |a|
+        # puts a
+      # end
     end
   end
 
