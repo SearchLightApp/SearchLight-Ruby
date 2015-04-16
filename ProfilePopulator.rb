@@ -29,7 +29,6 @@ class ProfilePopulator
 
   attr_accessor :session
 
-  =begin
 # function copied over from Francis, pretty much 
   def getAds(string, page)
     query = "https://www.google.com/search?q=#{string.gsub(/ /, '+')}&start=#{10*(page-1)}"
@@ -78,7 +77,6 @@ class ProfilePopulator
     end
     return ads
   end
-=end
 
 # before searching for the given string, sets the Location of search and then returns a dict w each result
   def getSearch(string, page)
@@ -90,7 +88,6 @@ class ProfilePopulator
       links = @session.all("#res h3 a")
     end
     return links.map{|elem| {txt: elem.text, url: elem[:href]}}
-
     #Encode the necessary information from each HTML element into a Ruby hash
     # links.map{|elem| {txt: elem.text, url: elem[:href]}}
     #
@@ -132,29 +129,22 @@ class ProfilePopulator
 
 # changes the location on the gsearch page
   def setSearchLocation(loc)
-    # @session.save_and_open_screenshot('search.png')
-    # puts @session.body
-
     # first turn off personal results
     @session.find('a[id="abar_ps_off"]').click
-    # puts @session.body
-    # @session.save_and_open_screenshot('personresults.png')
-    # @session.save_and_open_screenshot()
-
-    # puts @session.body
-    # puts 'hello-world'
     @session.find("a[id='hdtb-tls']").click
     options = @session.all(:css, 'div.hdtb-mn-hd')
 
-    # puts options.length
+    sleep(2)
+    # if the options to click on are empty, try again
     if options.empty?
       @session.find('a[id="hdtb-tls"]', text: 'Search tools').click
       options = @session.all(:css, 'div.hdtb-mn-hd')
     end
-    
-    puts options.length
+
+    sleep(2)
+    puts 'length of options:', options.length
     options[2].click
-    @session.save_and_open_screenshot('a.png')
+    @session.save_screenshot 'lc input.png'
     @session.fill_in 'lc-input', :with => loc
     @session.find('input[jsaction="loc.s"]').click
   end
@@ -171,11 +161,15 @@ class ProfilePopulator
 
     # search = pPop.getSearch('alzheimer', 1)
     if pPop.login!(account)
+
       search = pPop.getSearch('alzheimer', 1)
-      # search.each do |s|
-      #   puts s
+      search.each do |s|
+        puts s
+      end
+      # ads = pPop.getAds('cancer', 1)
+      # ads.each do |a|
+        # puts a
       # end
-      ads = pPop.getAds('cancer', 1)
     end
   end
 

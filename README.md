@@ -18,12 +18,12 @@ Not sure but maybe just in case. Gems that may be required
 
 brew install phantomjs
 
-## Databse Management
+## Database Management
 Start the database using:
 		"mongod --dbpath=PATH"
 Where PATH is the location of your database. If you don't have a database set up, mongo will initialize it at the given PATH.
 The folder pointed to by PATH must already exist.
 
-## To Run
+## To Run the Test
 
 	ruby TestB.rb
