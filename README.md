@@ -11,6 +11,7 @@ PhantomJS
 
 gem install selenium selenium-webdriver
 gem install mongoid
+gem install launchy 
 
 Not sure but maybe just in case. Gems that may be required
 	rack-test

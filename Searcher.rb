@@ -31,6 +31,7 @@ class Searcher
 
 # function copied over from Francis, pretty much 
   def getAds(string, page)
+    puts 'get ads'
     query = "https://www.google.com/search?q=#{string.gsub(/ /, '+')}&start=#{10*(page-1)}"
     @session.visit(query)
     sleep(2) #TODO Find a better solution to this
@@ -69,6 +70,7 @@ class Searcher
           truth = {behavioral: true, google_explanation: ad_truth[3], web_hist: ad_truth[7..-2]}
         end
       end
+      puts ad_text, ad_url, ad_description, page, truth
       ads.push({text_of_link: ad_text,
                 non_clickable_url: ad_url,
                 description: ad_description,
@@ -79,18 +81,16 @@ class Searcher
   end
 
 # before searching for the given string, sets the Location of search and then returns a dict w each result
-  def getSearch(string, page)
+  def getSearch(string, loc, page)
     query = "https://www.google.com/search?q=#{string.gsub(/ /, '+')}&start=#{10*(page-1)}"
     @session.visit(query)
 
-    setSearchLocation('Ypsilanti, MI')
+    setSearchLocation(loc)
     if @session.has_css?("#res")
       links = @session.all("#res h3 a")
     end
     return links.map{|elem| {txt: elem.text, url: elem[:href]}}
     #Encode the necessary information from each HTML element into a Ruby hash
-    # links.map{|elem| {txt: elem.text, url: elem[:href]}}
-    #
   end
 
 # visits the login page for an account and unchecks 'stay signed in'
@@ -129,17 +129,22 @@ class Searcher
 
 # changes the location on the gsearch page
   def setSearchLocation(loc)
+    # @session.save_and_open_screenshot('searchA.png')
+    # puts @session.body
+
+    # first turn off personal results
+    # @session.find('a[id="abar_ps_off"]').click
+    # puts @session.body
+    # @session.save_and_open_screenshot('personresultsA.png')
+    # @session.save_and_open_screenshot()
+
+    # puts @session.body
+    # puts 'hello-world'
     # first turn off personal results
     @session.find('a[id="abar_ps_off"]').click
-    @session.find("a[id='hdtb-tls']").click
-    options = @session.all(:css, 'div.hdtb-mn-hd')
 
-    sleep(2)
-    # if the options to click on are empty, try again
-    if options.empty?
-      @session.find('a[id="hdtb-tls"]', text: 'Search tools').click
-      options = @session.all(:css, 'div.hdtb-mn-hd')
-    end
+    # puts options.length
+    options[2].click
 
     sleep(2)
     puts 'length of options:', options.length
@@ -155,21 +160,13 @@ class Searcher
     @session.reset!
   end
 
-  def self.test
+  # {:username => 'xray.app.1', :passwd => 'xraymyass'}
+  def self.test(account, loc, query, page)
     pPop = self.new
-    account = {:username => 'xray.app.1', :passwd => 'xraymyass'}
 
-    # search = pPop.getSearch('alzheimer', 1)
     if pPop.login!(account)
-
-      search = pPop.getSearch('alzheimer', 1)
-      search.each do |s|
-        puts s
-      end
-      # ads = pPop.getAds('cancer', 1)
-      # ads.each do |a|
-        # puts a
-      # end
+      search = pPop.getSearch(query, loc, page)
+      ads = pPop.getAds('cancer', 1)
     end
   end
 
