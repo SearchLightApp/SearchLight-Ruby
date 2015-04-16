@@ -160,20 +160,13 @@ class ProfilePopulator
     @session.reset!
   end
 
-  def self.test
+  # {:username => 'xray.app.1', :passwd => 'xraymyass'}
+  def self.test(account, loc, query, page)
     pPop = self.new
-    account = {:username => 'xray.app.1', :passwd => 'xraymyass'}
 
     if pPop.login!(account)
-      search = pPop.getSearch('alzheimer', 'Yspilanti, MI', 1)
-      # search.each do |s|
-      #   puts s
-      # end
+      search = pPop.getSearch(query, loc, page)
       ads = pPop.getAds('cancer', 1)
-      # ads = pPop.getAds('cancer', 1)
-      # ads.each do |a|
-        # puts a
-      # end
     end
   end
 
