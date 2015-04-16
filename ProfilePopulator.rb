@@ -129,31 +129,22 @@ class ProfilePopulator
 
 # changes the location on the gsearch page
   def setSearchLocation(loc)
-    # @session.save_and_open_screenshot('search.png')
-    # puts @session.body
-
     # first turn off personal results
-    # @session.find('a[id="abar_ps_off"]').click
-    # puts @session.body
-    # @session.save_and_open_screenshot('personresults.png')
-    # @session.save_and_open_screenshot()
-
-    # puts @session.body
-    # puts 'hello-world'
+    @session.find('a[id="abar_ps_off"]').click
     @session.find("a[id='hdtb-tls']").click
     options = @session.all(:css, 'div.hdtb-mn-hd')
 
-    # puts options.length
+    sleep(2)
+    # if the options to click on are empty, try again
     if options.empty?
       @session.find('a[id="hdtb-tls"]', text: 'Search tools').click
       options = @session.all(:css, 'div.hdtb-mn-hd')
     end
 
-    puts options.length
-    options[2].click
-
     sleep(2)
-    # @session.save_and_open_screenshot('a.png')
+    puts 'length of options:', options.length
+    options[2].click
+    @session.save_screenshot 'lc input.png'
     @session.fill_in 'lc-input', :with => loc
     @session.find('input[jsaction="loc.s"]').click
   end
@@ -175,7 +166,10 @@ class ProfilePopulator
       search.each do |s|
         puts s
       end
-      ads = pPop.getAds('cancer', 1)
+      # ads = pPop.getAds('cancer', 1)
+      # ads.each do |a|
+        # puts a
+      # end
     end
   end
 
