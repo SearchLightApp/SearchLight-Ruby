@@ -2,7 +2,7 @@
 require 'capybara'
 require 'capybara/poltergeist'
 
-class ProfilePopulator
+class Searcher
   include Capybara::DSL # used instead of manually starting session
 
   # DRIVERS
@@ -175,4 +175,4 @@ class ProfilePopulator
 
 end # end ProfilePopulator
 
-ProfilePopulator.test
+Searcher.test

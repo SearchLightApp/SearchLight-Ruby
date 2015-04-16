@@ -1,4 +1,4 @@
-require_relative 'ProfilePopulator'
+require_relative 'Searcher'
 require_relative 'SearchParser'
 
 SP = SearchParser.new
@@ -12,7 +12,7 @@ def ProcessQuery(term, location, tries)
 	# we try to do some stuff, and catch (almost all) errors with rescue
 	global_variables
 	begin
-		profile = ProfilePopulator.new
+		profile = Searcher.new
 		##Change false here to try signing in
 		if $sign_me_in
 			signedin = profile.signIn()
