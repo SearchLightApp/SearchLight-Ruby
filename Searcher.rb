@@ -134,20 +134,14 @@ class Searcher
 
     # first turn off personal results
     # @session.find('a[id="abar_ps_off"]').click
-    # puts @session.body
-    # @session.save_and_open_screenshot('personresultsA.png')
-    # @session.save_and_open_screenshot()
 
-    # puts @session.body
-    # puts 'hello-world'
-    # first turn off personal results
-    @session.find('a[id="abar_ps_off"]').click
+    sleep(3) # wait so we can get the 'set Location' option
+    @session.find("a[id='hdtb-tls']").click
+    options = @session.all(:css, 'div.hdtb-mn-hd')
+    # @session.save_and_open_screenshot('searchA.png')
+    # puts options.length # check length of options
 
-    # puts options.length
-    options[2].click
-
-    sleep(2)
-    puts 'length of options:', options.length
+    options = @session.all(:css, 'div.hdtb-mn-hd')
     options[2].click
     @session.save_screenshot 'lc input.png'
     @session.fill_in 'lc-input', :with => loc
@@ -166,10 +160,10 @@ class Searcher
 
     if pPop.login!(account)
       search = pPop.getSearch(query, loc, page)
-      ads = pPop.getAds('cancer', 1)
+      # ads = pPop.getAds('cancer', 1)
     end
   end
 
 end # end ProfilePopulator
 
-Searcher.test
+print Searcher.test({:username => 'xray.app.1', :passwd => 'xraymyass'}, 'London, UK', 'rabies', 1)
