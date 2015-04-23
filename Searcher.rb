@@ -109,9 +109,9 @@ class Searcher
   #   # hover on Home and click Profile
   #   @session.find('a[title="Home"]').hover
   #   @session.find('a[aria-label="Profile"]').click
-  #   # page.save_screenshot 'profile.png' #optional
+  #   # page.save_screenshot 'img/profile.png' #optional
   #   @session.find('span[data-dest="about"]').click
-  #   # page.save_screenshot 'about.png' #optional
+  #   # page.save_screenshot 'img/about.png' #optional
 
   #   # find location block
   #   within(:xpath, '//*[@id="12"]') do
@@ -129,7 +129,7 @@ class Searcher
 
 # changes the location on the gsearch page
   def setSearchLocation(loc)
-    # @session.save_and_open_screenshot('searchA.png')
+    # @session.save_and_open_screenshot('img/searchA.png')
     # puts @session.body
 
     # first turn off personal results
@@ -138,32 +138,36 @@ class Searcher
     sleep(3) # wait so we can get the 'set Location' option
     @session.find("a[id='hdtb-tls']").click
     options = @session.all(:css, 'div.hdtb-mn-hd')
-    # @session.save_and_open_screenshot('searchA.png')
+    # @session.save_and_open_screenshot('img/searchA.png')
     # puts options.length # check length of options
 
     options = @session.all(:css, 'div.hdtb-mn-hd')
     options[2].click
-    @session.save_screenshot 'lc input.png'
+    @session.save_screenshot 'img/lc input.png'
     @session.fill_in 'lc-input', :with => loc
     @session.find('input[class="ksb mini"]').click
   end
 
 # clear all cookies from the session and reset it
   def clean
-    @session.driver.browser.manage.delete_all_cookies
+    # @session.driver.browser.manage.delete_all_cookies # THIS THROWS A NASTY ERROR
     @session.reset!
   end
 
   # {:username => 'xray.app.1', :passwd => 'xraymyass'}
-  def self.test(account, loc, query, page)
+  def self.test(account, loc, query, page, login)
     pPop = self.new
 
-    if pPop.login!(account)
-      search = pPop.getSearch(query, loc, page)
-      # ads = pPop.getAds('cancer', 1)
+    if login
+      pPop.login!(account)
     end
+    search = pPop.getSearch(query, loc, page)
+    # ads = pPop.getAds('cancer', 1) # no ads for now
+    pPop.clean # reset sessions and delete cookies
+
+    return search
   end
 
 end # end ProfilePopulator
 
-print Searcher.test({:username => 'xray.app.1', :passwd => 'xrayalltheasses'}, 'London, UK', 'rabies', 1)
+# print Searcher.test({:username => 'xray.app.1', :passwd => 'xrayalltheasses'}, 'London, UK', 'rabies', 1, true)

@@ -1,30 +1,17 @@
 require_relative 'Searcher'
-require_relative 'SearchParser'
+require_relative 'SearchComparison'
 
-SP = SearchParser.new
+SP = SearchComparison.new
 
-$sign_me_in = false
+queries = ["Immigration", "Healthcare"]
+locations = ["Minneapolis, MN", "Ypsilanti, MI"]
 
-terms = ["Immigration", "Abortion", "Loans", "Healthcare"]
-locations = ["Minneapolis, MN", "Ypsilanti, MI", "Yarmouth, MA", "Miami, Florida", "El Paso, TX"]
-
-def ProcessQuery(term, location, tries)
+def ProcessQuery(query, loc, tries)
 	# we try to do some stuff, and catch (almost all) errors with rescue
 	global_variables
 	begin
-		profile = Searcher.new
-		##Change false here to try signing in
-		if $sign_me_in
-			signedin = profile.signIn()
-			# if we could sign in
-			if signedin
-				profile.setProfileLocation(location) # uncomment for G+ profile setting
-			else
-				raise "Failed to signin"
-			end
-		end
-
-		results = profile.searchTerms(term, location)
+		# hard code account, dont login
+		results = Searcher.test({:username => 'xray.app.1', :passwd => 'xrayalltheasses'}, loc, query, 1, false)
 
 	# Here we catch errors, print them and try again
 	rescue StandardError => e
@@ -39,33 +26,28 @@ def ProcessQuery(term, location, tries)
 			abort("I tried and I tried, but I kept failing")
 			exit
 		else
-			ProcessQuery(term,location,tries-1)
+			ProcessQuery(query,loc,tries-1)
 		end
 	end
-	Capybara.reset_sessions!
 	return results
 end
 
-
-locations.each do |q_location|
-	STDOUT.write "\n\n$res['"+q_location+"']={}\n"
-	terms.each do |q_term|
-		results = ProcessQuery(q_term, q_location, 5)
-		#STDOUT.write "----------------------------------------------------------------------------------------------------\n"
-		if results.nil?
-			STDOUT.write "No results!\n"
-		else
-			#STDOUT.write "\n"
-			STDOUT.write "$res['"+q_location+"']['"+q_term+"']="
-			STDOUT.write results
-			STDOUT.write "\n"
-			#STDOUT.write results.size
-			#STDOUT.write "\n"
+# def test
+	r = {}
+	locations.each do |loc|
+		location = {}
+		queries.each do |q|
+			results = ProcessQuery(q, loc, 5)
+			# puts results
+			if results.nil?
+				STDOUT.write "No results for loc:"+loc+" and query:"+q+"\n"
+			else
+				location[q]=results
+			end
 		end
-		#STDOUT.write "----------------------------------------------------------------------------------------------------\n"
+		r[loc]=location
 	end
-end
+	puts(r['Minneapolis, MN']['Healthcare']) # pretty prints the results
+# end
 
-#Capybara.page.reset!
-#Capybara.page.current_window.close
-#page.execute_script "window.close();"
+# test()

@@ -1,22 +1,24 @@
 require 'capybara'
 # Import
 
-class SearchParser
+class SearchComparison
   def initialize()
   end
 
+# make into an array and subtract
 	def SearchComp(a,b)
 		a.to_a - b.to_a
   end
 
+# compare the indeces in all search results
 	def Permutation(a,b)
 		score = []
-		a.each_index do |element_index|
-			index_in_b = b.index(a[element_index])
-			if index_in_b.nil?
+		a.each_index do |i|
+			b_index = b.index(a[i])
+			if b_index.nil?
 				score.push( nil )
 			else
-				score.push(element_index - index_in_b)
+				score.push(i - b_index)
 			end
 		end
 		score
@@ -26,16 +28,16 @@ class SearchParser
   def ComparisonPrint(a,b)
     same = true
     score = []
-    a.each_index do |element_index|
-      index_in_b = b.index(a[element_index]) # get in b what is in a's index position
-      if not index_in_b.nil?
-        diff = element_index - index_in_b # compare the elements at same index in a & b
+    a.each_index do |i|
+      b_index = b.index(a[i]) # get in b what is in a's index position
+      if not b_index.nil? # if b is not nil
+        diff = i - b_index # compare the elements at same index in a & b
         if diff != 0
           same = false
-          puts sprintf("%+d", diff.to_s) + "  " + a[element_index][:txt]
+          puts sprintf("%+d", diff.to_s) + "  " + a[i][:txt]
         end
       else
-        puts "NA" + "  " + a[element_index][:txt]
+        puts "NA" + "  " + a[i][:txt]
       end
     end
     return same
@@ -64,23 +66,23 @@ class SearchParser
       any_diff = false
       #puts q_results.length.to_s + " results for:"
       PrintCities(citynames)
-      focus_city_array.each_index do |element_index|
-        index_in_other = q_results.index(focus_city_array[element_index])
+      focus_city_array.each_index do |i|
+        index_in_other = q_results.index(focus_city_array[i])
         if index_in_other.nil?
-          puts "\tREM" + "  " + focus_city_array[element_index][:txt]
+          puts "\tREM" + "  " + focus_city_array[i][:txt]
           any_diff = true
         else
-          diff = element_index - index_in_other
+          diff = i - index_in_other
           if diff != 0
-            puts sprintf("\t%+d ", diff.to_s) + "  " + focus_city_array[element_index][:txt]
+            puts sprintf("\t%+d ", diff.to_s) + "  " + focus_city_array[i][:txt]
             any_diff = true
           end
         end
       end
-      q_results.each_index do |element_index|
-        index_in_other = focus_city_array.index(q_results[element_index])
+      q_results.each_index do |i|
+        index_in_other = focus_city_array.index(q_results[i])
         if index_in_other.nil?
-          puts "\tADD" + "  " + q_results[element_index][:txt]
+          puts "\tADD" + "  " + q_results[i][:txt]
           any_diff = true
         end
       end
