@@ -145,7 +145,7 @@ class Searcher
     options[2].click
     @session.save_screenshot 'lc input.png'
     @session.fill_in 'lc-input', :with => loc
-    @session.find('input[jsaction="loc.s"]').click
+    @session.find('input[class="ksb mini"]').click
   end
 
 # clear all cookies from the session and reset it
@@ -166,4 +166,4 @@ class Searcher
 
 end # end ProfilePopulator
 
-print Searcher.test({:username => 'xray.app.1', :passwd => 'xraymyass'}, 'London, UK', 'rabies', 1)
+print Searcher.test({:username => 'xray.app.1', :passwd => 'xrayalltheasses'}, 'London, UK', 'rabies', 1)
