@@ -1,6 +1,6 @@
 require 'mongoid'
 
-path_to_db_config = './magic/config/mongoid.yml'
+path_to_db_config = './Model/mongoid.yml'
 Mongoid.load!(path_to_db_config, :development)
 
 puts Dir.pwd
@@ -17,9 +17,6 @@ me = Person.new(first_name: "Max", middle_name: "Lee", last_name: "Tucker")
 me.save()
 
 print Person.first
-
-
-#Clean up
 
 Person.collection.drop()
 

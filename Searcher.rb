@@ -155,7 +155,7 @@ class Searcher
   end
 
   # {:username => 'xray.app.1', :passwd => 'xraymyass'}
-  def self.test(account, loc, query, page, login)
+  def self.conductSearch(account, loc, query, page, login)
     pPop = self.new
 
     if login
