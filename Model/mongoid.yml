@@ -99,3 +99,16 @@ test:
         # low amounts for fast failures.
         max_retries: 1
         retry_interval: 0
+
+jumpingcrab:
+  sessions:
+    default:
+      database: magic_test
+      hosts:
+        - searchlight.jumpingcrab.com:27017
+      options:
+        read: primary
+        # In the test environment we lower the retries and retry interval to
+        # low amounts for fast failures.
+        max_retries: 1
+        retry_interval: 0

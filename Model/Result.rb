@@ -1,4 +1,4 @@
-#Each individual item from a search result
+#each individual item from a search Result
 class Result
   include Mongoid::Document
   field :position,  type: Integer
