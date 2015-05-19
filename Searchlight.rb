@@ -31,4 +31,4 @@ qq.save
 
 
 # Do *NOT* uncomment the next line
-#Query.collection.drop()
+# Query.collection.drop()
