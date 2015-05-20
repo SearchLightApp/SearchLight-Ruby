@@ -11,7 +11,7 @@ Mongoid.load!(path_to_db_config, :jumpingcrab)
 
 #TODO : Change this so we take command line arguments instead
 loc = "New York"
-search_string = "Jews"
+search_string = "Credit"
 
 # Credentials to use for login.
 credentials = {:username => 'xray.app.1', :passwd => 'xrayalltheasses'}
