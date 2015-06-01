@@ -1,7 +1,8 @@
 SearchLight
 =========
 
-SearchLight is a tool for finding discrepencies in the web search results that different users see. Right now, SearchLight can compare what users in different locations would see when they make the same Google search. Soon, you will also be able to observe how differences in gender, name, age, or education could create imperceptible differences in how search algorithms tailor what they deliver to you.
+SearchLight is a tool for finding discrepencies in the web among search results for different users. Right now, SearchLight can compare what users in different locations would see when they make the same Google search.
+Soon, you will also be able to observe how differences in gender, name, age, or education could create imperceptible differences in how search algorithms tailor what they deliver to you.
 
 ## Dependencies
 Firefox 34
@@ -25,6 +26,10 @@ Start the database using:
 Where PATH is the location of your database. If you don't have a database set up, mongo will initialize it at the given PATH.
 The folder pointed to by PATH must already exist.
 
-## To Run the Test
+## To Run
 
-	ruby TestB.rb
+	ruby Searchlight.rb file1 file2
+		// file1 -> plain txt of locations, separated by newlines
+		// file2 -> plain txt of search items, separated by newlines
+	ruby searchComparison [query] ["location"] // compare results for [query] and its location with all other locations
+

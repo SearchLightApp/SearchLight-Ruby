@@ -86,6 +86,7 @@ class Searcher
     @session.visit(query)
 
     setSearchLocation(loc)
+    sleep(2) # wait for location setting to kick in
     if @session.has_css?("#res")
       links = @session.all("#res h3 a")
     end
@@ -141,10 +142,13 @@ class Searcher
     # @session.save_and_open_screenshot('img/searchA.png')
     # puts options.length # check length of options
 
+    sleep(2)
     options = @session.all(:css, 'div.hdtb-mn-hd')
     options[2].click
+    sleep(3) # wait so we can get a box to fill
     @session.save_screenshot 'img/lc input.png'
     @session.fill_in 'lc-input', :with => loc
+    @session.save_screenshot 'img/fill.png'
     @session.find('input[class="ksb mini"]').click
   end
 

@@ -28,6 +28,7 @@ searches = readIntoArray(ARGV[1])
 credentials = {:username => 'xray.app.1', :passwd => 'xrayalltheasses'}
 
 locations.each do |loc|
+	STDOUT.write "+++++++++++++++++ Doing the relevant searches for location: " + loc + "\n"
 	searches.each do |search_string|
 		# Conduct a Google search using a headless browser.
 		arr = Searcher.conductSearch(credentials, loc, search_string, 1, false)
