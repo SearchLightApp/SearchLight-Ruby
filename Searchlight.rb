@@ -25,7 +25,7 @@ locations = readIntoArray(ARGV[0])
 searches = readIntoArray(ARGV[1])
 
 # Credentials to use for login.
-credentials = {:username => 'xray.app.1', :passwd => 'xrayalltheasses'}
+credentials = {:username => 'xray.app.1', :passwd => 'xraymagic10026'}
 
 locations.each do |loc|
 	STDOUT.write "+++++++++++++++++ Doing the relevant searches for location: " + loc + "\n"
