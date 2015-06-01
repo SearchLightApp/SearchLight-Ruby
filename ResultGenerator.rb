@@ -3,6 +3,7 @@ require_relative 'SearchComparison'
 
 SP = SearchComparison.new
 
+# hard coded locations
 queries = ["Immigration", "Healthcare"]
 locations = ["Minneapolis, MN", "Ypsilanti, MI"]
 

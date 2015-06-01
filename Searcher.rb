@@ -170,4 +170,3 @@ class Searcher
 
 end # end ProfilePopulator
 
-# print Searcher.test({:username => 'xray.app.1', :passwd => 'xrayalltheasses'}, 'London, UK', 'rabies', 1, true)

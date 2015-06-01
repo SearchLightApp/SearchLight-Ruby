@@ -65,7 +65,7 @@ class SearchComparison
       puts ""
       any_diff = false
       #puts q_results.length.to_s + " results for:"
-      PrintCities(citynames)
+      puts citynames
       focus_city_array.each_index do |i|
         index_in_other = q_results.index(focus_city_array[i])
         if index_in_other.nil?
@@ -92,16 +92,5 @@ class SearchComparison
     end
   end
 
-  def PrintCities(cityname_array)
-    puts cityname_array
-  end
-
-
-  def PrettyPrint(a)
-    a.each do |elem|
-      puts elem[:txt]
-      puts elem[:url]
-    end
-  end
 end
 
