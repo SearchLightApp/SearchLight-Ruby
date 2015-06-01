@@ -1,28 +1,33 @@
 require 'rubygems'
 require 'mongo'
+require_relative 'Results'
 
 class SearchComparison
 
-  def initialize(ip, db_name, q, city)
-    db = Mongo::Connection.new(ip).db(db_name)
-    coll = db.collection("queries")
-    fetched = coll.find({
-     'query' => q})
-    r = formatResults(fetched)
-    GlobalComparison(city, q, r)
+  def initialize(q, city)
+    GlobalComparison(city, q, $res)
   end
 
-  def formatResults(res)
-    results = {} # the results to be compared given a query
-    res.each do |r|
-      formatted = []
-      r['results'].each do|fr| # formatted results
-        formatted << {:txt=> fr['txt'], :url=> fr['url']}
-      end
-      results[r['location']] = formatted
-    end
-    return results
-  end
+  # def initialize(ip, db_name, q, city)
+  #   db = Mongo::Connection.new(ip).db(db_name)
+  #   coll = db.collection("queries")
+  #   fetched = coll.find({
+  #    'query' => q})
+  #   r = formatResults(fetched)
+  #   GlobalComparison(city, q, r)
+  # end
+
+  # def formatResults(res)
+  #   results = {} # the results to be compared given a query
+  #   res.each do |r|
+  #     formatted = []
+  #     r['results'].each do|fr| # formatted results
+  #       formatted << {:txt=> fr['txt'], :url=> fr['url']}
+  #     end
+  #     results[r['location']] = formatted
+  #   end
+  #   return results
+  # end
 
 # make into an array and subtract
 	def SearchComp(a,b)
@@ -67,13 +72,13 @@ class SearchComparison
     focus_city_array = nil
     res_db.each do |cityname , cityhash|
       if cityname != focus_city
-        cityresults = cityhash # an array of hashes that look like {:txt, :url}
+        cityresults = cityhash[topic] # an array of hashes that look like {:txt, :url}
         res_to_index[cityresults] ||= []
         res_to_index[cityresults].push(cityname)
       else
-        focus_city_array = cityhash
+        focus_city_array = cityhash[topic]
         puts "COMPARE:\t"+ cityname
-        puts "TOPIC:  \t"  + topic
+        puts "TOPIC:\t"  + topic
         puts "RESULTS:\t"+ focus_city_array.length.to_s
       end
     end
@@ -83,25 +88,25 @@ class SearchComparison
     res_to_index.each do |q_results, citynames|
       puts ""
       any_diff = false
-      #puts q_results.length.to_s + " results for:"
+      puts q_results.length.to_s + " results for:"
       puts citynames
-      focus_city_array.each_index do |i|
-        index_in_other = q_results.index(focus_city_array[i])
+      focus_city_array.each_index do |element_index|
+        index_in_other = q_results.index(focus_city_array[element_index])
         if index_in_other.nil?
-          puts "\tREM" + "  " + focus_city_array[i][:txt]
+          puts "\tREM" + "  " + focus_city_array[element_index][:txt]
           any_diff = true
         else
-          diff = i - index_in_other
+          diff = element_index - index_in_other
           if diff != 0
-            puts sprintf("\t%+d ", diff.to_s) + "  " + focus_city_array[i][:txt]
+            puts sprintf("\t%+d ", diff.to_s) + "  " + focus_city_array[element_index][:txt]
             any_diff = true
           end
         end
       end
-      q_results.each_index do |i|
-        index_in_other = focus_city_array.index(q_results[i])
+      q_results.each_index do |element_index|
+        index_in_other = focus_city_array.index(q_results[element_index])
         if index_in_other.nil?
-          puts "\tADD" + "  " + q_results[i][:txt]
+          puts "\tADD" + "  " + q_results[element_index][:txt]
           any_diff = true
         end
       end
@@ -110,6 +115,7 @@ class SearchComparison
       end
     end
   end
-end
 
-c = SearchComparison.new("104.131.15.123", "alpha_testing", ARGV[0], ARGV[1])
+end
+# c = SearchComparison.new("104.131.15.123", "alpha_testing", ARGV[0], ARGV[1])
+c = SearchComparison.new(ARGV[0], ARGV[1])
