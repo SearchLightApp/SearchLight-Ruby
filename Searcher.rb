@@ -90,23 +90,28 @@ class Searcher
     if @session.has_css?("#res")
       links = @session.all("#res h3 a")
     end
-    return links.map{|elem| {txt: elem.text, url: elem[:href]}}
-    #Encode the necessary information from each HTML element into a Ruby hash
-  end
-
-  def getAds(string, loc, page)
-    query = "https://www.google.com/search?q=#{string.gsub(/ /, '+')}&start=#{10*(page-1)}"
-    @session.visit(query)
-
-    setSearchLocation(loc)
-    sleep(2) # wait for location setting to kick in
     if @session.has_css?(".ads-ad")
       adlinks = @session.all(".ads-ad h3 a")
     end
-
-    return adlinks.map{|elem| {adtxt: elem.text, adurl: elem[:href]}}
+    storelinks =  links.map{|elem| {txt: elem.text, url: elem[:href]}}
+    storeads = adlinks.map{|elem| {adtxt: elem.text, adurl: elem[:href]}}
+    return {links: storelinks, ads: storeads};
     #Encode the necessary information from each HTML element into a Ruby hash
   end
+
+  # def getAds(string, loc, page)
+  #   query = "https://www.google.com/search?q=#{string.gsub(/ /, '+')}&start=#{10*(page-1)}"
+  #   @session.visit(query)
+  #
+  #   setSearchLocation(loc)
+  #   sleep(2) # wait for location setting to kick in
+  #   if @session.has_css?(".ads-ad")
+  #     adlinks = @session.all(".ads-ad h3 a")
+  #   end
+  #
+  #   return adlinks.map{|elem| {adtxt: elem.text, adurl: elem[:href]}}
+  #   #Encode the necessary information from each HTML element into a Ruby hash
+  # end
 
 # visits the login page for an account and unchecks 'stay signed in'
   def login!(account, link = 'https://accounts.google.com/ServiceLogin?hl=en')
