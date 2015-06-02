@@ -84,9 +84,10 @@ class Searcher
   def getSearch(string, loc, page)
     query = "https://www.google.com/search?q=#{string.gsub(/ /, '+')}&start=#{10*(page-1)}"
     @session.visit(query)
-
+    @session.save_screenshot 'img/results.png'
     setSearchLocation(loc)
     sleep(2) # wait for location setting to kick in
+
     if @session.has_css?("#res")
       links = @session.all("#res h3 a")
     end
@@ -180,15 +181,12 @@ class Searcher
   # {:username => 'xray.app.1', :passwd => 'xraymagic10026'}
   def self.conductSearch(account, loc, query, page, login)
     pPop = self.new
-
     if login
       pPop.login!(account)
     end
     search = pPop.getSearch(query, loc, page)
-    ads = pPop.getAds(query, loc, page)
     pPop.clean # reset sessions and delete cookies
-
-    return ads
+    return search
   end
 
 end # end ProfilePopulator
