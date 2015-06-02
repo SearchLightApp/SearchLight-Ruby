@@ -94,7 +94,11 @@ class Searcher
       adlinks = @session.all(".ads-ad h3 a")
     end
     storelinks =  links.map{|elem| {txt: elem.text, url: elem[:href]}}
-    storeads = adlinks.map{|elem| {adtxt: elem.text, adurl: elem[:href]}}
+    if adlinks.nil?
+      storeads = []
+    else
+      storeads = adlinks.map{|elem| {adtxt: elem.text, adurl: elem[:href]}}
+    end
     return {links: storelinks, ads: storeads};
     #Encode the necessary information from each HTML element into a Ruby hash
   end
@@ -184,15 +188,16 @@ class Searcher
     if login
       pPop.login!(account)
     end
+
     search = pPop.getSearch(query, loc, page)
-    ads = pPop.getAds(query, loc, page)
     pPop.clean # reset sessions and delete cookies
 
-    return ads
+    return search
   end
 
 end # end ProfilePopulator
 
+=begin
 # To run Searcher standalone, uncomment these
 credentials = {:username => 'xray.app.1', :passwd => 'xraymagic10026'}
 loc = "10001"
@@ -202,3 +207,4 @@ search_string = "need credit card"
 out = Searcher.conductSearch(credentials, loc, search_string, 1, false)
 #Searcher.getA
 puts out
+=end
