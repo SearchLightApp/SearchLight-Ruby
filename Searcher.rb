@@ -12,7 +12,7 @@ class Searcher
   end
   # headless
   Capybara.register_driver :poltergeist do |app|
-    Capybara::Poltergeist::Driver.new(app, :phantomjs_options => ['--debug=no', '--ignore-ssl-errors=yes', '--ssl-protocol=TLSv1'], :debug => false)
+    Capybara::Poltergeist::Driver.new(app, :phantomjs_options => ['--debug=no', '--ignore-ssl-errors=yes', '--ssl-protocol=TLSv1'], :debug => false, timeout: 1.minute)
   end
   Capybara.register_driver :selenium do |app|
     Capybara::Selenium::Driver.new(app)
