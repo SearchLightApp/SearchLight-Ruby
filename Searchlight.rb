@@ -34,6 +34,7 @@ credentials = {:username => 'xray.app.1', :passwd => 'xraymagic10026'}
 locations.each do |loc|
 	STDOUT.write "+++++++++++++++++ Doing the relevant searches for location: " + loc + "\n"
 	searches.each do |search_string|
+    STDOUT.write "+++++++++++++++++ >>> " + search_string + "\n"
 		# Conduct a Google search using a headless browser.
     search_output = Searcher.conductSearch(credentials, loc, search_string, 1, false)
 		links_arr = search_output[:links]
