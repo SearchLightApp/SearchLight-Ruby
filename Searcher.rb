@@ -172,11 +172,6 @@ class Searcher
     @session.reset!
   end
 
-  # To run Searcher standalone, uncomment these
-  # credentials = {:username => 'xray.app.1', :passwd => 'xraymagic10026'}
-  # loc = "10001"
-  # search_string = "need credit card"
-
   # {:username => 'xray.app.1', :passwd => 'xraymagic10026'}
   def self.conductSearch(account, loc, query, page, login)
     pPop = self.new
@@ -188,14 +183,17 @@ class Searcher
     ads = pPop.getAds(query, loc, page)
     pPop.clean # reset sessions and delete cookies
 
-    # print search
-    return search
-    # print ads
     return ads
   end
 
-  # # Uncomment to run test of Searcher alone
-  self.conductSearch(credentials, loc, search_string, 1, false)
-
 end # end ProfilePopulator
 
+# To run Searcher standalone, uncomment these
+credentials = {:username => 'xray.app.1', :passwd => 'xraymagic10026'}
+loc = "10001"
+search_string = "need credit card"
+
+# # Uncomment to run test of Searcher alone
+out = Searcher.conductSearch(credentials, loc, search_string, 1, false)
+#Searcher.getA
+puts out
