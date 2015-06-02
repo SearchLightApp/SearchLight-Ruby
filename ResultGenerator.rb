@@ -12,7 +12,7 @@ def ProcessQuery(query, loc, tries)
 	global_variables
 	begin
 		# hard code account, dont login
-		results = Searcher.conductSearch({:username => 'xray.app.1', :passwd => 'xrayalltheasses'}, loc, query, 1, false)
+		results = Searcher.conductSearch({:username => 'xray.app.1', :passwd => 'xraymagic10026'}, loc, query, 1, false)
 
 	# Here we catch errors, print them and try again
 	rescue StandardError => e
