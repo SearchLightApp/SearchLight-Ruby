@@ -158,7 +158,7 @@ class Searcher
     @session.reset!
   end
 
-  # {:username => 'xray.app.1', :passwd => 'xraymyass'}
+  # {:username => 'xray.app.1', :passwd => 'xraymagic10026'}
   def self.conductSearch(account, loc, query, page, login)
     pPop = self.new
 
@@ -166,6 +166,7 @@ class Searcher
       pPop.login!(account)
     end
     search = pPop.getSearch(query, loc, page)
+    search = pPop.getAds(query, loc, page)
     # ads = pPop.getAds('cancer', 1) # no ads for now
     pPop.clean # reset sessions and delete cookies
 
