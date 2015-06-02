@@ -22,11 +22,11 @@ Mongoid.load!(path_to_db_config, :jumpingcrab)
 #TODO: Set more sensible options in mongoid.yml (e.g. allow retries in case of connection failure)
 
 # Reads the appropriate files and creates an array with them
-#locations = readIntoArray(ARGV[0])
-#searches = readIntoArray(ARGV[1])
+locations = readIntoArray(ARGV[0])
+searches = readIntoArray(ARGV[1])
 
-locations = ["Miami", "Boston", "New Jersey", "Austin, TX"] #, "Boston"]
-searches = ["police"]   #, "Muslims"]
+#locations = ["Miami", "Boston", "New Jersey", "Austin, TX"] #, "Boston"]
+#searches = ["police"]   #, "Muslims"]
 
 # Credentials to use for login.
 credentials = {:username => 'xray.app.1', :passwd => 'xraymagic10026'}
