@@ -4,30 +4,30 @@ require_relative 'Results'
 
 class SearchComparison
 
-  def initialize(q, city)
-    GlobalComparison(city, q, $res)
+  # def initialize(q, city)
+  #   GlobalComparison(city, q, $res)
+  # end
+
+  def initialize(ip, db_name, q, city)
+    db = Mongo::Connection.new(ip).db(db_name)
+    coll = db.collection("queries")
+    fetched = coll.find({
+     'query' => q})
+    r = formatResults(fetched)
+    GlobalComparison(city, q, r)
   end
 
-  # def initialize(ip, db_name, q, city)
-  #   db = Mongo::Connection.new(ip).db(db_name)
-  #   coll = db.collection("queries")
-  #   fetched = coll.find({
-  #    'query' => q})
-  #   r = formatResults(fetched)
-  #   GlobalComparison(city, q, r)
-  # end
-
-  # def formatResults(res)
-  #   results = {} # the results to be compared given a query
-  #   res.each do |r|
-  #     formatted = []
-  #     r['results'].each do|fr| # formatted results
-  #       formatted << {:txt=> fr['txt'], :url=> fr['url']}
-  #     end
-  #     results[r['location']] = formatted
-  #   end
-  #   return results
-  # end
+  def formatResults(res)
+    results = {} # the results to be compared given a query
+    res.each do |r|
+      formatted = []
+      r['results'].each do|fr| # formatted results
+        formatted << {:txt=> fr['txt'], :url=> fr['url']}
+      end
+      results[r['location']] = formatted
+    end
+    return results
+  end
 
 # make into an array and subtract
 	def SearchComp(a,b)
@@ -72,11 +72,12 @@ class SearchComparison
     focus_city_array = nil
     res_db.each do |cityname , cityhash|
       if cityname != focus_city
-        cityresults = cityhash[topic] # an array of hashes that look like {:txt, :url}
+        # an array of hashes that look like {:txt, :url}
+        cityresults = cityhash # change to cityhash[topic] if using dummy results file
         res_to_index[cityresults] ||= []
         res_to_index[cityresults].push(cityname)
       else
-        focus_city_array = cityhash[topic]
+        focus_city_array = cityhash # change to cityhash[topic] if using dummy results file
         puts "COMPARE:\t"+ cityname
         puts "TOPIC:\t"  + topic
         puts "RESULTS:\t"+ focus_city_array.length.to_s
@@ -117,5 +118,5 @@ class SearchComparison
   end
 
 end
-# c = SearchComparison.new("104.131.15.123", "alpha_testing", ARGV[0], ARGV[1])
-c = SearchComparison.new(ARGV[0], ARGV[1])
+c = SearchComparison.new("104.131.15.123", "alpha_testing", ARGV[0], ARGV[1])
+# c = SearchComparison.new(ARGV[0], ARGV[1])
