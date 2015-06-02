@@ -29,56 +29,56 @@ class Searcher
 
   attr_accessor :session
 
-# function copied over from Francis, pretty much 
-  def getAds(string, page)
-    puts 'get ads'
-    query = "https://www.google.com/search?q=#{string.gsub(/ /, '+')}&start=#{10*(page-1)}"
-    @session.visit(query)
-    sleep(2) #TODO Find a better solution to this
-    begin
-      @session.find(:xpath, '//*[@id="mbEnd"]/h2/span[2]/a').click
-    rescue
-      begin
-        @session.find(:xpath, '//*[@id="tads"]/h2/span/a').click
-      rescue
-        begin
-        @session.find(:xpath, '//*[@id="tadsb"]/h2/span/a').click
-        rescue
-          return nil
-        end
-      end
-    end
-    sleep(1)
-    @session.find(:xpath, '//*[@id="abbl"]/div/div[2]/a').click
-    sleep(1)
-    
-    ads_list = @session.all('div.HK').map{|a| a.all('div.eB')}
-    ads = []
-    ads_list.each do |ad|
-      ad_info = ad.first.all('div').map{|e| e.text}
-      ad_text = ad_info[1]
-      ad_url = ad_info[2]
-      ad_description = ad_info[3..ad_info.count].join(' ')
-      ad_truth = ad.last.all('div').map{|e| e.text}
-      puts ad_info, ad_text, ad_url
-      if ad_truth[3] =~ /This ad matches the exact search you entered/
-        truth = {behavioral: false, google_explanation: ad_truth[3]}
-      elsif ad_truth[3] =~ /This ad matches terms similar to the ones you entered/
-        if ad_truth.count == 5
-          truth = {behavioral: false, google_explanation: ad_truth[3]}
-        else
-          truth = {behavioral: true, google_explanation: ad_truth[3], web_hist: ad_truth[7..-2]}
-        end
-      end
-      puts ad_text, ad_url, ad_description, page, truth
-      ads.push({text_of_link: ad_text,
-                non_clickable_url: ad_url,
-                description: ad_description,
-                page: page,
-                truth: truth})
-    end
-    return ads
-  end
+# # function copied over from Francis, pretty much
+#   def getAds(string, page)
+#     puts 'get ads'
+#     query = "https://www.google.com/search?q=#{string.gsub(/ /, '+')}&start=#{10*(page-1)}"
+#     @session.visit(query)
+#     sleep(2) #TODO Find a better solution to this
+#     begin
+#       @session.find(:xpath, '//*[@id="mbEnd"]/h2/span[2]/a').click
+#     rescue
+#       begin
+#         @session.find(:xpath, '//*[@id="tads"]/h2/span/a').click
+#       rescue
+#         begin
+#         @session.find(:xpath, '//*[@id="tadsb"]/h2/span/a').click
+#         rescue
+#           return nil
+#         end
+#       end
+#     end
+#     sleep(1)
+#     @session.find(:xpath, '//*[@id="abbl"]/div/div[2]/a').click
+#     sleep(1)
+#
+#     ads_list = @session.all('div.HK').map{|a| a.all('div.eB')}
+#     ads = []
+#     ads_list.each do |ad|
+#       ad_info = ad.first.all('div').map{|e| e.text}
+#       ad_text = ad_info[1]
+#       ad_url = ad_info[2]
+#       ad_description = ad_info[3..ad_info.count].join(' ')
+#       ad_truth = ad.last.all('div').map{|e| e.text}
+#       puts ad_info, ad_text, ad_url
+#       if ad_truth[3] =~ /This ad matches the exact search you entered/
+#         truth = {behavioral: false, google_explanation: ad_truth[3]}
+#       elsif ad_truth[3] =~ /This ad matches terms similar to the ones you entered/
+#         if ad_truth.count == 5
+#           truth = {behavioral: false, google_explanation: ad_truth[3]}
+#         else
+#           truth = {behavioral: true, google_explanation: ad_truth[3], web_hist: ad_truth[7..-2]}
+#         end
+#       end
+#       puts ad_text, ad_url, ad_description, page, truth
+#       ads.push({text_of_link: ad_text,
+#                 non_clickable_url: ad_url,
+#                 description: ad_description,
+#                 page: page,
+#                 truth: truth})
+#     end
+#     return ads
+#   end
 
 # before searching for the given string, sets the Location of search and then returns a dict w each result
   def getSearch(string, loc, page)
@@ -172,7 +172,7 @@ class Searcher
     @session.reset!
   end
 
-  # # To run Searcher standalone, uncomment these
+  # To run Searcher standalone, uncomment these
   # credentials = {:username => 'xray.app.1', :passwd => 'xraymagic10026'}
   # loc = "10001"
   # search_string = "need credit card"
@@ -188,14 +188,14 @@ class Searcher
     ads = pPop.getAds(query, loc, page)
     pPop.clean # reset sessions and delete cookies
 
-    print search
+    # print search
     return search
-    print ads
+    # print ads
     return ads
   end
 
   # # Uncomment to run test of Searcher alone
-  # self.conductSearch(credentials, loc, search_string, 1, false)
+  self.conductSearch(credentials, loc, search_string, 1, false)
 
 end # end ProfilePopulator
 
