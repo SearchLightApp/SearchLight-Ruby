@@ -1,6 +1,9 @@
 require 'rubygems'
+require 'mongoid'
 require 'mongo'
-require_relative 'Results'
+require_relative './Model/Query'
+require_relative './Model/Ad'
+require_relative './Model/Result'
 
 class SearchComparison
 
@@ -67,6 +70,38 @@ class SearchComparison
     return same
   end
 
+  def self.GlobalComparison_DB(focus_city, topic)
+
+    focus_res = Query.where(location: focus_city).where(query: topic).first #TODO: Don't just get the first one. Allow choosing of date.
+    if focus_res.nil?
+      puts "ERROR: Could not find query '"+ topic +"' for city: " + focus_city
+      return
+    end
+    puts "TOPIC:\t\t"  + topic
+    puts "LOCATION:\t" + focus_city
+    puts "DATE:\t\t"   + focus_res.created_at.to_s #TODO: Use a better string conversion for timestamps
+    puts "RESULTS:\t"  + focus_res.results.length.to_s
+
+    extractResList(Query.where(query: topic).first)
+
+    # Retrieve all queries matching a given topic. Except the focus result
+    all_topic_queries = Query.where(query: topic).not.where(id: focus_res.id)
+    all_topic_queries.each do |q|
+      puts "-----------"
+      puts q.location + " @ " + q.created_at.to_s
+    end
+
+  end
+
+  #Drop all the infromation from Result objects which is not important to distinguish between sets of results. For example the Result ID
+  def self.extractResList(query)
+    rmap = query.results.map do |res|
+      res.txt
+      #[txt: res.txt, url: res.url] #TODO Should we use URL to distinguish?
+    end
+    return rmap
+  end
+
   def GlobalComparison(focus_city, topic, res_db)
     res_to_index = {}
     focus_city_array = nil
@@ -118,5 +153,10 @@ class SearchComparison
   end
 
 end
-c = SearchComparison.new("104.131.15.123", "alpha_testing", ARGV[0], ARGV[1])
+
+# c = SearchComparison.new("104.131.15.123", "alpha_testing", ARGV[0], ARGV[1])
 # c = SearchComparison.new(ARGV[0], ARGV[1])
+
+path_to_db_config = './Model/mongoid.yml'
+Mongoid.load!(path_to_db_config, :jumpingcrab)
+SearchComparison.GlobalComparison_DB("10027", "I need money")

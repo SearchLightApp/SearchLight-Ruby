@@ -14,6 +14,10 @@ def readIntoArray(path)
 	return arr
 end
 
+puts Dir.pwd
+puts ARGV[0]
+puts ARGV[1]
+
 # This file tells the program where to find the Database
 path_to_db_config = './Model/mongoid.yml'
 
@@ -24,9 +28,6 @@ Mongoid.load!(path_to_db_config, :jumpingcrab)
 # Reads the appropriate files and creates an array with them
 locations = readIntoArray(ARGV[0])
 searches = readIntoArray(ARGV[1])
-
-#locations = ["Miami", "Boston", "New Jersey", "Austin, TX"] #, "Boston"]
-#searches = ["police"]   #, "Muslims"]
 
 # Credentials to use for login.
 credentials = {:username => 'xray.app.1', :passwd => 'xraymagic10026'}
