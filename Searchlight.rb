@@ -14,9 +14,11 @@ def readIntoArray(path)
 	return arr
 end
 
+puts "Hello"
 puts Dir.pwd
 puts ARGV[0]
 puts ARGV[1]
+puts "World"
 
 # This file tells the program where to find the Database
 path_to_db_config = './Model/mongoid.yml'
