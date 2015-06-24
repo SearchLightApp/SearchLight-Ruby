@@ -72,11 +72,13 @@ class Searcher
     # first turn off personal results
     # @session.find('a[id="abar_ps_off"]').click
 
-    sleep(3) # wait so we can get the 'set Location' option
+    #sleep(3) # wait so we can get the 'set Location' option
     tries = 0
     begin
       if tries < 10
         @session.find("a[id='hdtb-tls']").click
+      else
+        puts "I give up!"
       end
     rescue
       puts "Couldn't find a[id='hdtb-tls']. Waiting and retrying."
