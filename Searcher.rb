@@ -73,7 +73,17 @@ class Searcher
     # @session.find('a[id="abar_ps_off"]').click
 
     sleep(3) # wait so we can get the 'set Location' option
-    @session.find("a[id='hdtb-tls']").click
+    tries = 0
+    begin
+      if tries < 10
+        @session.find("a[id='hdtb-tls']").click
+      end
+    rescue
+      puts "Couldn't find a[id='hdtb-tls']. Waiting and retrying."
+      sleep(3)
+      tries += 1
+      retry
+    end
     options = @session.all(:css, 'div.hdtb-mn-hd')
     # @session.save_and_open_screenshot('img/searchA.png')
     # puts options.length # check length of options
