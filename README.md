@@ -33,3 +33,5 @@ The folder pointed to by PATH must already exist.
 		// file2 -> plain txt of search items, separated by newlines
 	ruby searchComparison [query] ["location"] // compare results for [query] and its location with all other locations
 
+## A note on Cron Jobs
+run the command "rvm cron setup" so that cron knows where to find any required gems
