@@ -15,11 +15,12 @@ def readIntoArray(path)
 end
 
 def main()
+	# check if using right
 	if ARGV.empty?
 		puts 'Please feed me two files like "ruby Searchlight.rb [locations] [searches]"'
 		exit
 	else
-		run
+		run()
 	end
 end
 
@@ -65,9 +66,10 @@ def run()
 			#Store Query in the database. Recursively stores Result and Ad items.
 			qq.save
 		end
+		# Do *NOT* uncomment the next line
+		# Query.collection.drop()
 	end
 end
 
+# use her for good, never evil
 main()
-		# Do *NOT* uncomment the next line
-		# Query.collection.drop()
