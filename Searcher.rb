@@ -2,25 +2,39 @@
 require 'capybara'
 require 'capybara/poltergeist'
 
+# for weird bug regarding timeout: 1.minute on the drivers' config
+require 'active_support'
+require 'active_support/core_ext/numeric'
+
+require 'rspec/expectations'
+
+
 class Searcher
+  include RSpec::Matchers
   include Capybara::DSL # used instead of manually starting session
 
-  # DRIVERS
+  Capybara.default_wait_time = 5 # up capybara's wait time, which is what rspec's 'expect' method uses
+
+  ### DRIVERS ###
   # To inspect page console: page.driver.debug
   Capybara.register_driver :poltergeist_debug do |app|
     Capybara::Poltergeist::Driver.new(app, :inspector => true)
   end
   # headless
   Capybara.register_driver :poltergeist do |app|
-    Capybara::Poltergeist::Driver.new(app, :phantomjs_options => ['--debug=no', '--ignore-ssl-errors=yes', '--ssl-protocol=TLSv1'], :debug => false, timeout: 1.minute, :visible => false)
+    # change :debug => true to see all sorts of handy logging. srsly.
+    Capybara::Poltergeist::Driver.new(app, :phantomjs_options => ['--ignore-ssl-errors=yes', '--ssl-protocol=TLSv1' ], :debug => false, timeout: 1.minute, :visible => false, js_errors: false)
   end
   Capybara.register_driver :selenium do |app|
     Capybara::Selenium::Driver.new(app)
   end
 
+  ### CAPYBARA ###
+  Capybara.default_wait_time = 5 # up capybara's wait time, which is what rspec's 'expect' method uses
+  Capybara.ignore_hidden_elements = false # interact with elements even if they're made invisible by CSS or JS
+
   def initialize()
-    Capybara.current_driver = :poltergeist
-    # Capybara.javascript_driver = :pant_debug
+    Capybara.current_driver = :poltergeist_debug
 
     @session = Capybara::Session.new(:poltergeist)
     @session.driver.headers = { 'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36' } # spoof user
@@ -36,12 +50,16 @@ class Searcher
 
     setSearchLocation(loc)
     sleep(2) # wait for location setting to kick in
+
+    # get search results
     if @session.has_css?("#res")
       links = @session.all("#res h3 a")
     end
+    # get ads
     if @session.has_css?(".ads-ad")
       adlinks = @session.all(".ads-ad h3 a")
     end
+    #Encode the necessary information from each HTML element into a Ruby hash
     storelinks =  links.map{|elem| {txt: elem.text, url: elem[:href]}}
     if adlinks.nil?
       storeads = []
@@ -49,9 +67,7 @@ class Searcher
       storeads = adlinks.map{|elem| {adtxt: elem.text, adurl: elem[:href]}}
     end
     return {links: storelinks, ads: storeads};
-    #Encode the necessary information from each HTML element into a Ruby hash
   end
-
 
 # visits the login page for an account and unchecks 'stay signed in'
   def login!(account, link = 'https://accounts.google.com/ServiceLogin?hl=en')
@@ -66,88 +82,51 @@ class Searcher
 
 # changes the location on the gsearch page
   def setSearchLocation(loc)
-    # @session.save_and_open_screenshot('img/searchA.png')
-    # puts @session.body
-
     # first turn off personal results
     # @session.find('a[id="abar_ps_off"]').click
+    expect(@session).to have_css("a[id='hdtb-tls']")
+    @session.find("a[id='hdtb-tls']").click
 
-    #sleep(3) # wait so we can get the 'set Location' option
-    max_tries = 10
-    tries = 0
-    begin
-      if tries < max_tries
-        @session.find("a[id='hdtb-tls']").click
-      else
-        puts "I give up!"
-        exit(1)
-      end
-    rescue
-      puts "Couldn't find a[id='hdtb-tls']. Waiting and retrying."
-      sleep(3)
-      tries += 1
-      retry
-    end
+    expect(@session).to have_css('div.hdtb-mn-hd')
+    options = @session.all(:css, 'div.hdtb-mn-hd')
 
-    # @session.save_and_open_screenshot('img/searchA.png')
-    # puts options.length # check length of options
-=begin
-    #sleep(2)
-    tries = 0
-    begin
-      if tries < max_tries
-        options = @session.all(:css, 'div.hdtb-mn-hd')
-        options[2].click
-      else
-        puts "I give up!"
-      end
-    rescue
-      puts "Couldn't find the third lement with div.hdtb-mn-hd. Waiting and retrying."
-      sleep(3)
-      tries += 1
-      retry
-    end
-=end
+    expect(options.length).to be >= 2
+    expect(@session).to have_content("Search tools")
+    options[2].trigger('click')
+    # @session.save_screenshot 'img/clicked.png' # debugging
 
-    #options = @session.all(:css, 'div.hdtb-mn-hd')
-    #puts options.length
-    #puts options[0]
-    #puts options[1]
-    #options[2].click
-
-    sleep(3)
-    @session.save_screenshot 'img/no_opt_1.png'
-    opt = @session.find('a', text: 'Search tools', exact: true).click
-    @session.save_screenshot 'img/no_opt_2.png'
-    sleep(2) # wait so we can get a box to fill
-    @session.save_screenshot 'img/no_opt_4.png'
-    opt = @session.all('div', :text => 'Search near...')
-    puts opt.length
-    puts opt
-    @session.save_screenshot 'img/no_opt_5.png'
-    opt[0].click
+    # @session.save_screenshot 'img/lc input.png' # debugging
     @session.fill_in 'lc-input', :with => loc
-    @session.find('input[class="ksb mini"]').click
+
+    while @session.find('input[id="lc-input"]').value != loc do
+      puts 'fill it outtttt'
+      @session.fill_in 'lc-input', :with => loc
+    end
+
+    expect(@session).to have_css('input[class="ksb mini"]')
+    # @session.save_screenshot 'img/fill.png' # debugging
+    @session.find('input[class="ksb mini"]').trigger('click')
   end
 
 # clear all cookies from the session and reset it
   def clean
     # @session.driver.browser.manage.delete_all_cookies # THIS THROWS A NASTY ERROR
     @session.reset!
+    @session.driver.quit # without this, you'll get a TOO MANY PAGES error thrown by PhantomJS
   end
 
   # {:username => 'xray.app.1', :passwd => 'xraymagic10026'}
   def self.conductSearch(account, loc, query, page, login)
     pPop = self.new
-
     if login
       pPop.login!(account)
     end
 
     search = pPop.getSearch(query, loc, page)
     pPop.clean # reset sessions and delete cookies
-
     return search
   end
-
 end # end ProfilePopulator
+
+# To test on its own
+# Searcher.conductSearch({:username => 'xray.app.1', :passwd => 'xraymagic10026'}, 'Bozeman, MT', 'cows', 1, false)
