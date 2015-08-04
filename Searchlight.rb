@@ -17,8 +17,23 @@ end
 # This file tells the program where to find the Database
 path_to_db_config = './Model/mongoid.yml'
 
-# Load the config file. Second argument specifies which configuration to use.
-Mongoid.load!(path_to_db_config, :cathy)
+max_tries = 10
+tries = 0
+begin
+	if tries < max_tries
+		# Load the config file. Second argument specifies which configuration to use.
+		Mongoid.load!(path_to_db_config, :cathy)
+	else
+		puts "I give up! Exiting..."
+		exit(1)
+	end
+rescue
+	puts "Couldn't load mongoid.yml. Waiting and retrying."
+	sleep(3)
+	tries += 1
+	retry
+end
+
 #TODO: Set more sensible options in mongoid.yml (e.g. allow retries in case of connection failure)
 
 # Reads the appropriate files and creates an array with them

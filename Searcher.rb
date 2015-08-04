@@ -73,12 +73,14 @@ class Searcher
     # @session.find('a[id="abar_ps_off"]').click
 
     #sleep(3) # wait so we can get the 'set Location' option
+    max_tries = 10
     tries = 0
     begin
-      if tries < 10
+      if tries < max_tries
         @session.find("a[id='hdtb-tls']").click
       else
         puts "I give up!"
+        exit(1)
       end
     rescue
       puts "Couldn't find a[id='hdtb-tls']. Waiting and retrying."
@@ -86,17 +88,45 @@ class Searcher
       tries += 1
       retry
     end
-    options = @session.all(:css, 'div.hdtb-mn-hd')
+
     # @session.save_and_open_screenshot('img/searchA.png')
     # puts options.length # check length of options
+=begin
+    #sleep(2)
+    tries = 0
+    begin
+      if tries < max_tries
+        options = @session.all(:css, 'div.hdtb-mn-hd')
+        options[2].click
+      else
+        puts "I give up!"
+      end
+    rescue
+      puts "Couldn't find the third lement with div.hdtb-mn-hd. Waiting and retrying."
+      sleep(3)
+      tries += 1
+      retry
+    end
+=end
 
-    sleep(2)
-    options = @session.all(:css, 'div.hdtb-mn-hd')
-    options[2].click
-    sleep(3) # wait so we can get a box to fill
-    @session.save_screenshot 'img/lc input.png'
+    #options = @session.all(:css, 'div.hdtb-mn-hd')
+    #puts options.length
+    #puts options[0]
+    #puts options[1]
+    #options[2].click
+
+    sleep(3)
+    @session.save_screenshot 'img/no_opt_1.png'
+    opt = @session.find('a', text: 'Search tools', exact: true).click
+    @session.save_screenshot 'img/no_opt_2.png'
+    sleep(2) # wait so we can get a box to fill
+    @session.save_screenshot 'img/no_opt_4.png'
+    opt = @session.all('div', :text => 'Search near...')
+    puts opt.length
+    puts opt
+    @session.save_screenshot 'img/no_opt_5.png'
+    opt[0].click
     @session.fill_in 'lc-input', :with => loc
-    @session.save_screenshot 'img/fill.png'
     @session.find('input[class="ksb mini"]').click
   end
 

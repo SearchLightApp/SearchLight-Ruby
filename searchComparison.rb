@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'mongoid'
-require 'mongo'
+#require 'mongo'
 require_relative './Model/Query'
 require_relative './Model/Ad'
 require_relative './Model/Result'
@@ -74,7 +74,7 @@ class SearchComparison
 
     focus_res = Query.where(location: focus_city).where(query: topic).first #TODO: Don't just get the first one. Allow choosing of date.
     if focus_res.nil?
-      puts "ERROR: Could not find query '"+ topic +"' for city: " + focus_city
+      puts "WARNING: Could not find query '"+ topic +"' for location '" + focus_city + "'"
       return
     end
     puts "TOPIC:\t\t"  + topic
@@ -82,16 +82,50 @@ class SearchComparison
     puts "DATE:\t\t"   + focus_res.created_at.to_s #TODO: Use a better string conversion for timestamps
     puts "RESULTS:\t"  + focus_res.results.length.to_s
 
-    extractResList(Query.where(query: topic).first)
+    focus_reslist = extractResList(Query.where(query: topic).first)
+    # A hash array tha maps sets of results to queries. We will use this to associate queries with identical results
+    res_to_query = {}
 
     # Retrieve all queries matching a given topic. Except the focus result
     all_topic_queries = Query.where(query: topic).not.where(id: focus_res.id)
     all_topic_queries.each do |q|
-      puts "-----------"
-      puts q.location + " @ " + q.created_at.to_s
+      #TODO remove
+      #puts "-----------"
+      #puts q.location + " @ " + q.created_at.to_s
+      q_reslist = extractResList(q)
+      res_to_query[q_reslist] ||= []
+      res_to_query[q_reslist].push(q)
     end
 
+    res_to_query.each do |q_reslist , q_List|
+      any_diff = false
+      puts "Result Group:"
+      puts q_List.map{ |q| "\t" + q.location + " @ " + q.created_at.to_s}
+      puts "\t\tResults: (" + q_reslist.length.to_s + " total)"
+      focus_reslist.each do |res|
+        index_in_query = q_reslist.index(res)
+        if index_in_query.nil?
+          puts "\t\t\tDEL" + "  " + res
+          any_diff = true
+        else
+          diff = focus_reslist.index(res) - index_in_query
+          if diff != 0
+            puts sprintf("\t\t\t%+d ", diff.to_s) + "  " + res
+            any_diff = true
+          end
+        end
+      end
+      q_reslist.each do |res|
+        if focus_reslist.index(res).nil?
+          puts "\t\t\tADD" + "  " + res
+        end
+      end
+      if !any_diff
+        puts "\t\tNo difference"
+      end
+    end
   end
+
 
   #Drop all the infromation from Result objects which is not important to distinguish between sets of results. For example the Result ID
   def self.extractResList(query)
