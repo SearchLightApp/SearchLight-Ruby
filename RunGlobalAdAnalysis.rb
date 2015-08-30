@@ -8,5 +8,5 @@ require_relative './Model/Result'
 
 path_to_db_config = './Model/mongoid.yml'
 Mongoid.load!(path_to_db_config, :jumpingcrab)
-SearchComparison.AdFrequencyAnalysis("10027", "I need money")
+SearchComparison.GlobalAdFrequencyAnalysis("I need money")
 
