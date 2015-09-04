@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'mongoid'
-require_relative './SearchComparison'
+require_relative './searchComparison'
 require_relative './Model/Query'
 require_relative './Model/Ad'
 require_relative './Model/Result'
