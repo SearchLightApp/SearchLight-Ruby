@@ -136,7 +136,7 @@ class SearchComparison
 
     # Print table body
     ad_impressions.each do |adkey , count|
-      ln =  adkey.to_s + ',' + count.to_s + ','
+      ln =  adkey.to_s.gsub(/\,/,"") + ',' + count.to_s + ','
       location_impressions.keys.sort.each do |locationkey|
         ln += adcounts[locationkey][adkey].to_s + ','
       end
@@ -144,7 +144,7 @@ class SearchComparison
     end
 
     # Print footer line
-    ln = "TOTAL IMPRESSIONS,,"
+    ln = "TOTAL IMPRESSIONS AT LOCATION,,"
     location_impressions.keys.sort.each do |locationkey|
       ln += location_impressions[locationkey].to_s + ','
     end
