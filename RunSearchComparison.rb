@@ -8,4 +8,4 @@ require_relative './Model/Result'
 
 path_to_db_config = './Model/mongoid.yml'
 Mongoid.load!(path_to_db_config, :cathy)
-SearchComparison.GlobalComparison_DB("10027", "how do i get food stamps")
+SearchComparison.GlobalComparison("10027", "how do i get food stamps")
