@@ -17,7 +17,7 @@ class SearchComparison
     fetched = coll.find({
      'query' => q})
     r = formatResults(fetched)
-    GlobalComparison(city, q, r)
+    GlobalComparison(city, q, r) #TODO: Why is this getting called here?
   end
 
   def formatResults(res)
@@ -70,7 +70,89 @@ class SearchComparison
     return same
   end
 
-  def self.GlobalComparison_DB(focus_city, topic)
+  def self.AdFrequencyAnalysis(focus_city, topic)
+    focus_res = Query.where(location: focus_city).where(query: topic)
+    if focus_res.nil?
+      puts "WARNING: Could not find query '"+ topic +"' for location '" + focus_city + "'"
+      return
+    end
+
+    adcounts = {}
+    focus_res.each do |fr|
+      fr.ads.each do |ad|
+        adcounts[ad.adtxt] ||= 0
+        adcounts[ad.adtxt]  += 1
+      end
+    end
+    impressions = focus_res.length
+    puts "TOPIC:\t\t "  + topic
+    puts "LOCATION:\t " + focus_city
+    puts "IMPRESSIONS: " + impressions.to_s
+    adcounts.each do |adtxt , adcount|
+      puts adcount.to_s + "\t" + (adcount.fdiv(impressions)*100).round(1).to_s.rjust(5,"0") + "%\t" + adtxt
+    end
+  end
+
+  def self.GlobalAdFrequencyAnalysis(topic) #TODO : Distinguish by ad URL as well as text? USE IDENTIFIER METHOD ON AD AND RESULT OBJECTS
+    focus_res = Query.where(query: topic)
+    if focus_res.nil?
+      puts "WARNING: Could not find any entries for query '"+ topic +"'"
+      return
+    end
+
+    adcounts = {} # 2D array mapping a location and ad to number of times the ad was seen at that location
+    location_impressions = {} # total number of impressions that are in the DB for a given location
+    ad_impressions = {} # total number of impressions that are in the DB for a given location (This can be computed from location_impressions but the set of keys here is also useful)
+    focus_res.each do |fr|
+      # Count impressions for this location
+      location_impressions[fr.location] ||= 0
+      location_impressions[fr.location]  += 1
+      # Count sightings of each ad.
+      adcounts[fr.location] ||= {}
+      fr.ads.each do |ad|
+        # Counting ad impressions per location
+        adcounts[fr.location][ad.adtxt] ||= 0
+        adcounts[fr.location][ad.adtxt]  += 1
+        # Counting overall ad impressions
+        ad_impressions[ad.adtxt] ||= 0
+        ad_impressions[ad.adtxt]  += 1
+      end
+    end
+
+    total_impressions = focus_res.length
+
+    #CSV OUTPUT PSEUDOCODE
+    puts "TOPIC," + topic
+    puts "IMPRESSIONS," + total_impressions.to_s
+
+    #first line
+
+    # Print header Line
+    ln = "AD TEXT,AD IMPRESSIONS,"
+    location_impressions.keys.sort.each do |locationkey|
+      ln += locationkey + ','
+    end
+    puts ln
+
+    # Print table body
+    ad_impressions.each do |adkey , count|
+      ln =  adkey.to_s + ',' + count.to_s + ','
+      location_impressions.keys.sort.each do |locationkey|
+        ln += adcounts[locationkey][adkey].to_s + ','
+      end
+      puts ln
+    end
+
+    # Print footer line
+    ln = "TOTAL IMPRESSIONS,,"
+    location_impressions.keys.sort.each do |locationkey|
+      ln += location_impressions[locationkey].to_s + ','
+    end
+    puts ln
+
+  end
+
+  def self.GlobalComparison(focus_city, topic)
 
     focus_res = Query.where(location: focus_city).where(query: topic).first #TODO: Don't just get the first one. Allow choosing of date.
     if focus_res.nil?
@@ -136,6 +218,7 @@ class SearchComparison
     return rmap
   end
 
+=begin  THIS CODE HAS BEEN REPLACED BY A VERSION THAT USES THE DATABASE
   def GlobalComparison(focus_city, topic, res_db)
     res_to_index = {}
     focus_city_array = nil
@@ -185,12 +268,17 @@ class SearchComparison
       end
     end
   end
+=end
 
 end
 
-# c = SearchComparison.new("104.131.15.123", "alpha_testing", ARGV[0], ARGV[1])
-# c = SearchComparison.new(ARGV[0], ARGV[1])
+# EXAMPLE: TO RUN AD ANALYSIS
+# path_to_db_config = './Model/mongoid.yml'
+# Mongoid.load!(path_to_db_config, :jumpingcrab)
+# SearchComparison.AdAnalysis("10027", "I need money")
 
-path_to_db_config = './Model/mongoid.yml'
-Mongoid.load!(path_to_db_config, :jumpingcrab)
-SearchComparison.GlobalComparison_DB("10027", "I need money")
+
+# EXAMPLE: TO RUN SEARCH COMPARISON
+#path_to_db_config = './Model/mongoid.yml'
+#Mongoid.load!(path_to_db_config, :jumpingcrab)
+#SearchComparison.GlobalComparison("10027", "I need money")
