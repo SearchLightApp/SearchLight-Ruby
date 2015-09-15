@@ -7,7 +7,7 @@ class Ad
   embedded_in :query
 
   def identifier
-    return [self.adtxt, ""]
-    # return [self.adtxt, self.adurl]
+    #return [self.adtxt, ""]
+    return [self.adtxt, self.adurl]
   end
 end
