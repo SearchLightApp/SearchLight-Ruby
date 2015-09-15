@@ -95,11 +95,17 @@ class SearchComparison
 
   def self.GlobalAdFrequencyAnalysis(topic) #TODO : Distinguish by ad URL as well as text? USE IDENTIFIER METHOD ON AD AND RESULT OBJECTS
     focus_res = Query.where(query: topic)
-    if focus_res.nil?
+    if focus_res.empty?
       puts "WARNING: Could not find any entries for query '"+ topic +"'"
       return
     end
 
+    Query.all.each do |q|
+      puts q.query
+    end
+
+    exit(0)
+    # and ad is identified by a pair [txt, url]. call this an ad key
     adcounts = {} # 2D array mapping a location and ad to number of times the ad was seen at that location
     location_impressions = {} # total number of impressions that are in the DB for a given location
     ad_impressions = {} # total number of impressions that are in the DB for a given location (This can be computed from location_impressions but the set of keys here is also useful)
@@ -111,32 +117,30 @@ class SearchComparison
       adcounts[fr.location] ||= {}
       fr.ads.each do |ad|
         # Counting ad impressions per location
-        adcounts[fr.location][ad.adtxt] ||= 0
-        adcounts[fr.location][ad.adtxt]  += 1
+        adcounts[fr.location][ad.identifier] ||= 0
+        adcounts[fr.location][ad.identifier]  += 1
         # Counting overall ad impressions
-        ad_impressions[ad.adtxt] ||= 0
-        ad_impressions[ad.adtxt]  += 1
+        ad_impressions[ad.identifier] ||= 0
+        ad_impressions[ad.identifier]  += 1
       end
     end
 
     total_impressions = focus_res.length
 
-    #CSV OUTPUT PSEUDOCODE
-    puts "TOPIC," + topic
+    #CSV OUTPUT CODE
+    puts "TOPIC," + topic.to_s.gsub(/\,/,"")
     puts "IMPRESSIONS," + total_impressions.to_s
 
-    #first line
-
     # Print header Line
-    ln = "AD TEXT,AD IMPRESSIONS,"
+    ln = "AD TEXT,AD URL,AD IMPRESSIONS,"
     location_impressions.keys.sort.each do |locationkey|
-      ln += locationkey + ','
+      ln += locationkey.to_s.gsub(/\,/,"") + ','
     end
     puts ln
 
     # Print table body
     ad_impressions.each do |adkey , count|
-      ln =  adkey.to_s.gsub(/\,/,"") + ',' + count.to_s + ','
+      ln =  adkey[0].to_s.gsub(/\,/,"") + ',' + adkey[1].to_s.gsub(/\,/,"") + ',' + count.to_s + ','
       location_impressions.keys.sort.each do |locationkey|
         ln += adcounts[locationkey][adkey].to_s + ','
       end

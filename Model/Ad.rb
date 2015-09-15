@@ -5,4 +5,9 @@ class Ad
   field :adtxt,       type: String
   field :adurl,       type: String
   embedded_in :query
+
+  def identifier
+    return [self.adtxt, ""]
+    # return [self.adtxt, self.adurl]
+  end
 end
