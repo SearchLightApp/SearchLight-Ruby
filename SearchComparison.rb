@@ -100,11 +100,6 @@ class SearchComparison
       return
     end
 
-    Query.all.each do |q|
-      puts q.query
-    end
-
-    exit(0)
     # and ad is identified by a pair [txt, url]. call this an ad key
     adcounts = {} # 2D array mapping a location and ad to number of times the ad was seen at that location
     location_impressions = {} # total number of impressions that are in the DB for a given location
