@@ -29,7 +29,7 @@ def run()
 	path_to_db_config = './Model/mongoid.yml'
 
 	# Load the config file. Second argument specifies which configuration to use.
-	Mongoid.load!(path_to_db_config, :cathy)
+	Mongoid.load!(path_to_db_config, :jumpingcrab)
 	#TODO: Set more sensible options in mongoid.yml (e.g. allow retries in case of connection failure)
 
 	# Reads the appropriate files and creates an array with them

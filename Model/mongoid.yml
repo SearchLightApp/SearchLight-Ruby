@@ -103,7 +103,7 @@ test:
 jumpingcrab:
   sessions:
     default:
-      database: alpha_testing
+      database: test2
       hosts:
         - searchlight.jumpingcrab.com:27017
       options:

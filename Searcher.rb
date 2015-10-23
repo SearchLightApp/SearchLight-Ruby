@@ -55,6 +55,7 @@ class Searcher
     if @session.has_css?("#res")
       links = @session.all("#res h3 a")
     end
+
     # get ads
     if @session.has_css?(".ads-ad")
       adlinks = @session.all(".ads-ad h3 a")
@@ -65,6 +66,19 @@ class Searcher
       storeads = []
     else
       storeads = adlinks.map{|elem| {adtxt: elem.text, adurl: elem[:href]}}
+=begin This is just debugging stuff. Delete it if it annoys you
+      adlinks.each do |elem|
+        if elem.text == ""
+          puts ""
+          puts "I found an empty element"
+          puts elem
+          puts elem.to_s
+          puts elem.text
+          puts elem[:href]
+          exit(0)
+        end
+      end
+=end
     end
     return {links: storelinks, ads: storeads};
   end

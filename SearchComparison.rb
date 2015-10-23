@@ -151,6 +151,14 @@ class SearchComparison
 
   end
 
+  def self.GlobalSearchResultAnalysis(topic)
+    focus_res = Query.where(query: topic)
+    if focus_res.empty?
+      puts "WARNING: Could not find any entries for query '"+ topic +"'"
+      return
+    end
+  end
+
   def self.GlobalComparison(focus_city, topic)
 
     focus_res = Query.where(location: focus_city).where(query: topic).first #TODO: Don't just get the first one. Allow choosing of date.
