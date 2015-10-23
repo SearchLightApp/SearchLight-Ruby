@@ -104,7 +104,7 @@ class Searcher
       @session.find("a[id='hdtb-tls']").click
     rescue # ElementNotFound
       if tries < 10
-        puts "I tried #" + tries
+        puts "I tried #" + tries.to_s
         retry
       end
         raise
