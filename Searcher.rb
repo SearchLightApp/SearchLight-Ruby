@@ -102,7 +102,7 @@ class Searcher
     begin
       tries = 0
       @session.find("a[id='hdtb-tls']").click
-    rescue ElementNotFound
+    rescue # ElementNotFound
       if tries < 10
         puts "I tried #" + tries
         retry
