@@ -98,7 +98,7 @@ class Searcher
   def setSearchLocation(loc)
     # first turn off personal results
     # @session.find('a[id="abar_ps_off"]').click
-    expect(@session).to have_css("a[id='hdtb-tls']")
+    # expect(@session).to have_css("a[id='hdtb-tls']")
     begin
       tries = 0
       @session.find("a[id='hdtb-tls']").click
