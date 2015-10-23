@@ -99,7 +99,16 @@ class Searcher
     # first turn off personal results
     # @session.find('a[id="abar_ps_off"]').click
     expect(@session).to have_css("a[id='hdtb-tls']")
-    @session.find("a[id='hdtb-tls']").click
+    begin
+      tries = 0
+      @session.find("a[id='hdtb-tls']").click
+    rescue ElementNotFound
+      if tries < 10
+        puts "I tried #" + tries
+        retry
+      end
+        raise
+    end
 
     expect(@session).to have_css('div.hdtb-mn-hd')
     options = @session.all(:css, 'div.hdtb-mn-hd')
