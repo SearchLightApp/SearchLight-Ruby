@@ -107,10 +107,11 @@ class Searcher
       if tries < max_tries
         tries = tries + 1
         @session.save_screenshot 'img/no_hdtb.png'
-        puts "I tried, but failed. I will try " + max_tries.to_s + " times. This is try #" + tries.to_s
+        puts "Could not find \"a[id='hdtb-tls']\" in the DOM. I will try " + max_tries.to_s + " times. This is try #" + tries.to_s
         retry
-      end
+      else
         raise
+      end
     end
 
     expect(@session).to have_css('div.hdtb-mn-hd')
