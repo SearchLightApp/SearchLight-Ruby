@@ -100,11 +100,14 @@ class Searcher
     # @session.find('a[id="abar_ps_off"]').click
     # expect(@session).to have_css("a[id='hdtb-tls']")
     begin
+      max_tries = 3
       tries = 0
       @session.find("a[id='hdtb-tls']").click
     rescue # ElementNotFound
-      if tries < 10
-        puts "I tried #" + tries.to_s
+      if tries < max_tries
+        tries = tries + 1
+        @session.save_screenshot 'img/no_hdtb' + tries.to_s + '.png'
+        puts "I tried, but failed. I will try " + max_tries.to_s + " times. This is try #" + tries.to_s
         retry
       end
         raise
