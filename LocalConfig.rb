@@ -1,7 +1,7 @@
 
 class LocalConfig
   def self.path_to_db_config
-    return '/Users/charles/Cloud/Code/Ruby/SearchLight/Model/mongoid.yml'
+    return '/home/admin/searchlight/Model/mongoid.yml'
   end
   def self.db_config_id
     return :rebecca
