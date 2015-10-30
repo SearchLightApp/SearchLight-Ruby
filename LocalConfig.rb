@@ -6,4 +6,7 @@ class LocalConfig
   def self.db_config_id
     return :cathy
   end
+  def self.credentials
+    return {:username => 'xray.app.1', :passwd => 'xraymagic10026'}
+  end
 end

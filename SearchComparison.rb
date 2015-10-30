@@ -185,7 +185,7 @@ class SearchComparison
     puts "IMPRESSIONS," + total_impressions.to_s
 
     # Print header Line
-    ln = "AD TEXT,AD URL,AD IMPRESSIONS,"
+    ln = "Result TEXT,Result URL,Result IMPRESSIONS,"
     location_impressions.keys.sort.each do |locationkey|
       ln += locationkey.to_s.gsub(/\,/,"") + ','
     end

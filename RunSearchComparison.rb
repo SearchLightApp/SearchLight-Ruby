@@ -8,6 +8,7 @@ require_relative './LocalConfig'
 
 if ARGV.length != 2
   puts "Incorrect number of arguments."
+  exit
 end
 
 Mongoid.load!(LocalConfig.path_to_db_config, LocalConfig.db_config_id)
