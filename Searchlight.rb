@@ -34,13 +34,14 @@ class Searchlight
 			searches = readIntoArray(ARGV[1])
 
 			number_of_queries.times do |i|
+				n = i + 1
 				loc = locations.sample
 				search_string = searches.sample
-				puts "("+i.to_s+"/"+number_of_queries.to_s+")"
+				puts "ITR:(" + i.to_s + "/" + number_of_queries.to_s + ")\tLOC: " + loc + "\n\tQRY: " + search_string
 				begin
 					run(loc, search_string)
 				rescue
-					log.info "\nFailed:\n\tITR:(" + i.to_s + "/" + number_of_queries.to_s + ")\n\tLOC: " + loc + "\n\tQRY: " + search_string
+					log.info "\nFailed:\n\tITR:(" + n.to_s + "/" + number_of_queries.to_s + ")\n\tLOC: " + loc + "\n\tQRY: " + search_string
 					exit
 				end
 			end
