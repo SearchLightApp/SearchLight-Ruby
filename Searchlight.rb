@@ -37,7 +37,7 @@ class Searchlight
 				n = i + 1
 				loc = locations.sample
 				search_string = searches.sample
-				puts "ITR:(" + i.to_s + "/" + number_of_queries.to_s + ")\tLOC: " + loc + "\n\tQRY: " + search_string
+				puts "ITR:(" + n.to_s + "/" + number_of_queries.to_s + ")\tLOC: " + loc + "\tQRY: " + search_string
 				begin
 					run(loc, search_string)
 				rescue
