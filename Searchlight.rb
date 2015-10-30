@@ -17,8 +17,6 @@ class Searchlight
 	end
 
 	def self.main()
-		log = Logger.new("| tee ./log/error.log", 'weekly') # note the pipe ( '|' ), now log.info will log to both STDOUT and test.log
-
 		if ARGV.length != 3
 			puts "Please feed me two files and a number like \"ruby Searchlight.rb [locations] [searches] [# of queries]\""
 			exit
@@ -26,6 +24,7 @@ class Searchlight
 			puts "I don't understand how many queries I should run"
 			exit
 		else
+			log = Logger.new("| tee ./log/error.log", 'weekly') # note the pipe ( '|' ), now log.info will log to both STDOUT and test.log
 			Mongoid.load!(LocalConfig.path_to_db_config, LocalConfig.db_config_id)
 
 			number_of_queries = ARGV[2].to_s
