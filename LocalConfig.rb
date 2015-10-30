@@ -4,6 +4,6 @@ class LocalConfig
     return './Model/mongoid.yml'
   end
   def self.db_config_id
-    return :jumpingcrab
+    return :cathy
   end
 end
