@@ -93,9 +93,9 @@ test:
       database: magic_test
       hosts:
         - localhost:27017
+      user: 'user'
+      password: 'But4Bo6Xorage1'
       options:
-        user: 'user'
-        password: 'But4Bo6Xorage1'
         read: primary
         # In the test environment we lower the retries and retry interval to
         # low amounts for fast failures.
@@ -108,10 +108,10 @@ jumpingcrab:
       database: test2
       hosts:
         - searchlight.jumpingcrab.com:27017
+      user: 'user'
+      password: 'But4Bo6Xorage1'
       options:
         read: primary
-        user: 'user'
-        password: 'But4Bo6Xorage1'
         # In the test environment we lower the retries and retry interval to
         # low amounts for fast failures.
         max_retries: 1
@@ -123,10 +123,10 @@ cathy:
       database: cathy2
       hosts:
         - searchlight.jumpingcrab.com:27017
+      user: 'user'
+      password: 'But4Bo6Xorage1'
       options:
         read: primary
-        user: 'user'
-        password: 'But4Bo6Xorage1'
         # In the test environment we lower the retries and retry interval to
         # low amounts for fast failures.
         max_retries: 3
@@ -138,24 +138,24 @@ cecile:
       database: cecile1
       hosts:
         - searchlight.jumpingcrab.com:27017
+      user: 'user'
+      password: 'But4Bo6Xorage1'
       options:
         read: primary
-        user: 'user'
-        password: 'But4Bo6Xorage1'
         # In the test environment we lower the retries and retry interval to
         # low amounts for fast failures.
         max_retries: 3
         retry_interval: 1
 
-cecile:
+rebecca:
   sessions:
     default:
-      database: cecile1
+      database: rebecca3
+      user: 'user'
+      password: 'But4Bo6Xorage1'
       hosts:
         - searchlight.jumpingcrab.com:27017
       options:
         read: primary
-        user: 'user'
-        password: 'But4Bo6Xorage1'
         max_retries: 3
         retry_interval: 1
