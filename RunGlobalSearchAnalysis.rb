@@ -6,6 +6,8 @@ require_relative './Model/Ad'
 require_relative './Model/Result'
 require_relative './LocalConfig'
 
+puts "Sorry Charlie, this isn't implemented yet."
+exit 0
 
-Mongoid.load!(LocalConfig.path_to_db_config, LocalConfig.db_config_id)
-SearchComparison.GlobalComparison("10027", "how do i get food stamps")
+#Mongoid.load!(Config.path_to_db_config, Config.db_config_id)
+#SearchComparison.GlobalAdFrequencyAnalysis("I need money")

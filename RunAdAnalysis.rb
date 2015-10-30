@@ -4,9 +4,9 @@ require_relative './SearchComparison'
 require_relative './Model/Query'
 require_relative './Model/Ad'
 require_relative './Model/Result'
-require_relative './Config'
+require_relative './LocalConfig'
 
 
-Mongoid.load!(Config.path_to_db_config, Config.db_config_id)
+Mongoid.load!(LocalConfig.path_to_db_config, LocalConfig.db_config_id)
 SearchComparison.AdFrequencyAnalysis("10027", "I need money")
 

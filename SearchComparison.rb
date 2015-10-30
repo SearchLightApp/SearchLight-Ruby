@@ -157,6 +157,56 @@ class SearchComparison
       puts "WARNING: Could not find any entries for query '"+ topic +"'"
       return
     end
+
+    # and ad is identified by a pair [txt, url]. call this an ad key
+    adcounts = {} # 2D array mapping a location and ad to number of times the ad was seen at that location
+    location_impressions = {} # total number of impressions that are in the DB for a given location
+    ad_impressions = {} # total number of impressions that are in the DB for a given location (This can be computed from location_impressions but the set of keys here is also useful)
+    focus_res.each do |fr|
+      # Count impressions for this location
+      location_impressions[fr.location] ||= 0
+      location_impressions[fr.location]  += 1
+      # Count sightings of each ad.
+      adcounts[fr.location] ||= {}
+      fr.ads.each do |ad|
+        # Counting ad impressions per location
+        adcounts[fr.location][ad.identifier] ||= 0
+        adcounts[fr.location][ad.identifier]  += 1
+        # Counting overall ad impressions
+        ad_impressions[ad.identifier] ||= 0
+        ad_impressions[ad.identifier]  += 1
+      end
+    end
+
+    total_impressions = focus_res.length
+
+    #CSV OUTPUT CODE
+    puts "TOPIC," + topic.to_s.gsub(/\,/,"")
+    puts "IMPRESSIONS," + total_impressions.to_s
+
+    # Print header Line
+    ln = "AD TEXT,AD URL,AD IMPRESSIONS,"
+    location_impressions.keys.sort.each do |locationkey|
+      ln += locationkey.to_s.gsub(/\,/,"") + ','
+    end
+    puts ln
+
+    # Print table body
+    ad_impressions.each do |adkey , count|
+      ln =  adkey[0].to_s.gsub(/\,/,"") + ',' + adkey[1].to_s.gsub(/\,/,"") + ',' + count.to_s + ','
+      location_impressions.keys.sort.each do |locationkey|
+        ln += adcounts[locationkey][adkey].to_s + ','
+      end
+      puts ln
+    end
+
+    # Print footer line
+    ln = "TOTAL IMPRESSIONS AT LOCATION,,"
+    location_impressions.keys.sort.each do |locationkey|
+      ln += location_impressions[locationkey].to_s + ','
+    end
+    puts ln
+
   end
 
   def self.GlobalComparison(focus_city, topic)

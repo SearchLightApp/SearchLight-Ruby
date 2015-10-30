@@ -3,7 +3,7 @@ require_relative 'Searcher'
 require_relative './Model/Query'
 require_relative './Model/Result'
 require_relative './Model/Ad'
-require_relative './Config'
+require_relative './LocalConfig'
 
 def readIntoArray(path)
 	arr = []
@@ -30,7 +30,7 @@ def run()
 	#path_to_db_config = Config.path_to_db_config
 
 	# Load the config file. Second argument specifies which configuration to use.
-	Mongoid.load!(Config.path_to_db_config, Config.db_config_id)
+	Mongoid.load!(LocalConfig.path_to_db_config, LocalConfig.db_config_id)
 	#TODO: Set more sensible options in mongoid.yml (e.g. allow retries in case of connection failure)
 
 	# Reads the appropriate files and creates an array with them
