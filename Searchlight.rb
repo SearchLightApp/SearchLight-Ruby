@@ -27,7 +27,7 @@ class Searchlight
 			log = Logger.new("| tee ./log/error.log", 'weekly') # note the pipe ( '|' ), now log.info will log to both STDOUT and test.log
 			Mongoid.load!(LocalConfig.path_to_db_config, LocalConfig.db_config_id)
 
-			number_of_queries = ARGV[2].to_s
+			number_of_queries = ARGV[2].to_i
 
 			# Reads the appropriate files and creates an array with them
 			locations = readIntoArray(ARGV[0])
@@ -36,11 +36,11 @@ class Searchlight
 			number_of_queries.times do |i|
 				loc = locations.sample
 				search_string = searches.sample
-				puts "("+n.to_s+"/"+number_of_queries.to_s+")"
+				puts "("+i.to_s+"/"+number_of_queries.to_s+")"
 				begin
 					run(loc, search_string)
 				rescue
-					log.info "\nFailed:\n\tLOC: " + loc + "\n\tQRY: " + search_string
+					log.info "\nFailed:\n\tITR:(" + i.to_s + "/" + number_of_queries.to_s + ")\n\tLOC: " + loc + "\n\tQRY: " + search_string
 					exit
 				end
 			end
