@@ -36,7 +36,7 @@ class Searchlight
 			number_of_queries.times do |i|
 				loc = locations.sample
 				search_string = searches.sample
-				puts "("+n.to_s+"/"number_of_queries.to_s")"
+				puts "("+n.to_s+"/"+number_of_queries.to_s+")"
 				begin
 					run(loc, search_string)
 				rescue
