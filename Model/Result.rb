@@ -5,4 +5,10 @@ class Result
   field :txt,       type: String
   field :url,       type: String
   embedded_in :query
+
+
+  def identifier
+    #return [self.adtxt, ""]
+    return [self.txt, self.url]
+  end
 end
