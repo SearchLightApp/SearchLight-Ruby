@@ -1,6 +1,8 @@
 *~ SearchLight *~
 =========
 
+THIS VERSION OF SEARCHLIGHT IS NOW DEPRECATED. WE ARE PORTING THE APPLICATION TO PYTHON. STAY TUNED.
+
 SearchLight is a tool for finding discrepencies in the web among search results for different users. Right now, SearchLight can compare what users in different locations would see when they make the same Google search.
 Soon, you will also be able to observe how differences in gender, name, age, or education could create imperceptible differences in how search algorithms tailor what they deliver to you.
 
